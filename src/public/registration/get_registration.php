@@ -11,9 +11,8 @@
     <h2>Создать аккаунт</h2>
     <p class="subtitle">Зарегистрируйтесь, чтобы начать покупки</p>
 
-    <form action="handle_registration.php" method="POST">
+    <form action="" method="POST">
 
-        <?php require_once './handle_registration.php'; ?>
       <label for="name">Имя</label>
       <?php if (isset($errors['name'])):?>
           <label style="color: red"><?php echo $errors['name']?></label>
@@ -46,7 +45,7 @@
       <button type="submit">Зарегистрироваться</button>
     </form>
 
-    <p class="login-link">Уже есть аккаунт? <a href="#">Войти</a></p>
+    <p class="login-link">Уже есть аккаунт? <a href="/login">Войти</a></p>
   </div>
 </body>
 </html>

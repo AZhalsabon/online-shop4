@@ -12,6 +12,8 @@
     <div class="search">
         <input type="text" placeholder="Поиск товаров...">
     </div>
+    <a href="/profile">Мой профиль</a>
+
     <button class="cart-btn">Корзина (0)</button>
 </header>
 

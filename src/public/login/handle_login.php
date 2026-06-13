@@ -38,7 +38,7 @@ if(empty($validateErrors)){
 
             session_start();
             $_SESSION['userId'] = $user['id'];
-            header("Location: /catalog.php");
+            header("Location: /catalog");
             exit;
 
         }else{
@@ -47,5 +47,5 @@ if(empty($validateErrors)){
     }
 
 }
-require_once "./get_login.php";
+require_once "./login/get_login.php";
 

@@ -56,7 +56,7 @@ if (empty(validateRegistrationForm($_POST))){
 
     if($count > 0){
         $errors['email'] = "Этот email уже зарегистрирован.";
-        require_once './get_registration.php';
+        require_once './registration/get_registration.php';
     }
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -64,17 +64,20 @@ if (empty(validateRegistrationForm($_POST))){
     $stmt = $pdo->prepare("INSERT INTO users (name,email,password) VALUES (:name,:email,:password)");
     $stmt->execute(['name' => $name,'email' => $email,'password' => $hashedPassword]);
 
+    header("Location: /login");
 
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->execute(['email'=>$email]);
 
-    $data = $stmt->fetch();
-    print_r($data);
+
+//    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+//    $stmt->execute(['email'=>$email]);
+//
+//    $data = $stmt->fetch();
+//    print_r($data);
 
 }
 
-require_once './get_registration.php';
+require_once './registration/get_registration.php';
 
 
 

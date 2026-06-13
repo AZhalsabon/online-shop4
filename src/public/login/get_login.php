@@ -11,7 +11,7 @@
     <h2>Добро пожаловать</h2>
     <p class="subtitle">Войдите в свой аккаунт</p>
 
-    <form action = "handle_login.php" method="POST">
+    <form action = "" method="POST">
         <label for="email">Email</label>
         <input type="email" name="useremail" placeholder="you@example.com" required>
 
@@ -29,7 +29,7 @@
         <button type="submit">Войти</button>
     </form>
 
-    <p class="signup-link">Нет аккаунта? <a href="#">Зарегистрироваться</a></p>
+    <p class="signup-link">Нет аккаунта? <a href="/registration">Зарегистрироваться</a></p>
 </div>
 </body>
 </html>
