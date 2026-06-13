@@ -41,6 +41,18 @@
                     </div>
                 </div>
             </div>
+            <form action="/add-product" method="POST">
+
+                <input type="hidden" name="product_id" placeholder="Ваше product_id" value="<?php echo $product['id']  ?>">
+
+                <label for="amount">amount</label>
+                <?php if (isset($errors['amount'])):?>
+                    <label style="color: red"><?php echo $errors['amount']?></label>
+                <?php endif; ?>
+                <input type="text" name="amount" placeholder="amount" >
+
+                <button type="submit">add product</button>
+            </form>
         <?php endforeach;?>
         <!--        <div class="card">-->
         <!---->

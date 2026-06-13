@@ -7,8 +7,8 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 
 
 if ($requestUri === '/registration'){
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
 
     if($requestMethod === 'GET'){
         $user->getRegistrate();
@@ -20,8 +20,8 @@ if ($requestUri === '/registration'){
     
     
 }elseif ($requestUri === '/login'){
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
 
     if($requestMethod ==='GET'){
         $user->getLogin();
@@ -32,8 +32,8 @@ if ($requestUri === '/registration'){
     }
 
 }elseif($requestUri === '/catalog'){
-    require_once './classes/Product.php';
-    $product = new Product();
+    require_once '../Controllers/ProductController.php';
+    $product = new ProductController();
 
     if ($requestMethod === 'GET'){
         $product->getDataCatalog();
@@ -44,8 +44,8 @@ if ($requestUri === '/registration'){
     }
 
 }elseif($requestUri === '/profile'){
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
 
     if($requestMethod === 'GET'){
         $user->getDataProfile();
@@ -56,8 +56,8 @@ if ($requestUri === '/registration'){
     }
 
 }elseif($requestUri === '/edit-profile'){
-    require_once './classes/User.php';
-    $user = new User();
+    require_once '../Controllers/UserController.php';
+    $user = new UserController();
 
     if($requestMethod === 'GET'){
         $user->getEditProfile();
@@ -68,8 +68,8 @@ if ($requestUri === '/registration'){
     }
 
 }elseif($requestUri === '/add-product') {
-    require_once './classes/Product.php';
-    $product = new Product();
+    require_once '../Controllers/ProductController.php';
+    $product = new ProductController();
 
     if ($requestMethod === 'GET') {
         $product->getAddProduct();
