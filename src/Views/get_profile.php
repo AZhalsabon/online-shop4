@@ -11,7 +11,8 @@
 <header>
     <div class="logo">🛍️ ShopLy</div>
 
-    <button class="cart-btn">Корзина (0)</button>
+    <a href="/cart">коризина</a>
+    <a href="/catalog">Каталог</a>
 </header>
 
 <div class="container">

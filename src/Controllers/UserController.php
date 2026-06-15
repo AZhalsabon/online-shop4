@@ -13,6 +13,8 @@ class UserController
             exit;
         }
 
+
+
         require_once '../Views/get_registration.php';
     }
 
@@ -38,7 +40,7 @@ class UserController
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             require_once '../Model/User.php';
-            $userModel - new User();
+            $userModel = new User();
 
             $userModel->addUserDb($name,$email,$hashedPassword);
 
@@ -215,9 +217,7 @@ class UserController
             header("Location: /profile");
             exit;
         }
-
         require_once '../Views/editProfile_page.php';
-
     }
 
     private function validateEditProfile(array $data): array
@@ -250,9 +250,6 @@ class UserController
                 $errors = "Этот Email уже занят";
             }
         }
-
         return $errors;
     }
-
-
 }

@@ -91,6 +91,9 @@ class ProductController
 
 
             }
+
+            header("Location: /cart");
+
         }
 
     }

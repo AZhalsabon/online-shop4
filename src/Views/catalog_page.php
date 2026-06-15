@@ -13,8 +13,8 @@
         <input type="text" placeholder="Поиск товаров...">
     </div>
     <a href="/profile">Мой профиль</a>
+    <a href="/cart">Корзина</a>
 
-    <button class="cart-btn">Корзина (0)</button>
 </header>
 
 <div class="container">
@@ -45,7 +45,7 @@
 
                 <input type="hidden" name="product_id" placeholder="Ваше product_id" value="<?php echo $product['id']  ?>">
 
-                <label for="amount">amount</label>
+                <label for="amount">amount </label>
                 <?php if (isset($errors['amount'])):?>
                     <label style="color: red"><?php echo $errors['amount']?></label>
                 <?php endif; ?>
