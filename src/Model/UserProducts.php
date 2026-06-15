@@ -1,6 +1,6 @@
 <?php
 //require_once"../Model/Model.php";
-
+namespace Model;
 class UserProducts extends Model
 {
     public function getUserProducts()

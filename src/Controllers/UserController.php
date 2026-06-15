@@ -1,7 +1,18 @@
 <?php
+namespace Controllers;
+
+
+use Model\User;
 
 class UserController
 {
+    private $userModel;
+
+    public function __construct()
+    {
+        $this->userModel = new User();
+    }
+
     public function getRegistrate()
     {
         if(session_status() !== PHP_SESSION_ACTIVE){
@@ -27,10 +38,8 @@ class UserController
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-//            require_once '../Model/User.php';
-            $userModel = new User();
 
-            $result =  $userModel->getByEmail($email);
+            $result =  $this->userModel->getByEmail($email);
 
             if($result !== false){
                 $errors['email'] = "Этот email уже зарегистрирован.";
@@ -39,10 +48,8 @@ class UserController
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-//            require_once '../Model/User.php';
-            $userModel = new User();
 
-            $userModel->addUserDb($name,$email,$hashedPassword);
+            $this->userModel->addUserDb($name,$email,$hashedPassword);
 
             header("Location: /login");
         }
@@ -99,10 +106,9 @@ class UserController
             $useremail = $_POST['useremail'];
             $password = $_POST['password'];
 
-//            require_once '../Model/User.php';
-            $userModel = new User();
 
-            $result =  $userModel->getByEmail($useremail);
+
+            $result =  $this->userModel->getByEmail($useremail);
 
             if ($result === false){
                 $errors['useremail'] = 'email incorrect';
@@ -162,10 +168,8 @@ class UserController
             exit;
         }
 
-//        require_once '../Model/User.php';
-        $userModel = new User();
 
-        $dataUser = $userModel->getBySessionId($_SESSION['userId']);
+        $dataUser = $this->userModel->getBySessionId($_SESSION['userId']);
 
         require_once '../Views/get_profile.php';
     }
@@ -202,16 +206,15 @@ class UserController
             $userId = $_SESSION['userId'];
 
             require_once '../Model/User.php';
-            $userModel = new User();
 
-            $userData = $userModel->getBySessionId($userId);
+            $userData = $this->userModel->getBySessionId($userId);
 
             if($userData['name'] !== $newName){
-                $userModel->updateNameById($newName, $userId);
+                $this->userModel->updateNameById($newName, $userId);
             }
 
             if($userData['email'] !== $newEmail){
-                $userModel->updateEmailById($newEmail, $userId);
+                $this->userModel->updateEmailById($newEmail, $userId);
             }
 
             header("Location: /profile");
@@ -242,9 +245,8 @@ class UserController
             $userId = $_SESSION['userId'];
 
             require_once '../Model/User.php';
-            $userModel = new User();
 
-            $user =  $userModel->getByEmail($data['email']);
+            $user =  $this->userModel->getByEmail($data['email']);
 
             if ($user['id'] !== $userId){
                 $errors = "Этот Email уже занят";

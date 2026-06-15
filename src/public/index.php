@@ -1,8 +1,54 @@
 <?php
 
-$autoloadCore = function (string $className){
+//$autoloadCore = function (string $className){
+//
+//    $path = "../Core/$className.php";
+//    if(file_exists($path)){
+//        require_once $path;
+//        return true;
+//    }
+//
+//    return false;
+//};
+//
+//$autoloadControllers = function (string $className){
+//
+//    $path = "../Controllers/$className.php";
+//    if(file_exists($path)){
+//        require_once $path;
+//        return true;
+//    }
+//
+//    return false;
+//};
+//
+//$autoloadModel = function (string $className){
+//
+//    $path = "../Model/$className.php";
+//    if(file_exists($path)){
+//        require_once $path;
+//        return true;
+//    }
+//
+//    return false;
+//};
+//
+//$autoloadViews = function (string $className){
+//
+//    $path = "../Views/$className.php";
+//    if(file_exists($path)){
+//        require_once $path;
+//        return true;
+//    }
+//
+//    return false;
+//};
 
-    $path = "../Core/$className.php";
+$autoload = function (string $className){
+    $path = str_replace("\\" ,'/',$className );
+    $path = $path . '.php';
+    $path = './../' . $path;
+
     if(file_exists($path)){
         require_once $path;
         return true;
@@ -11,45 +57,14 @@ $autoloadCore = function (string $className){
     return false;
 };
 
-$autoloadControllers = function (string $className){
+spl_autoload_register($autoload);
 
-    $path = "../Controllers/$className.php";
-    if(file_exists($path)){
-        require_once $path;
-        return true;
-    }
 
-    return false;
-};
+//spl_autoload_register($autoloadCore);
+//spl_autoload_register($autoloadControllers);
+//spl_autoload_register($autoloadModel);
 
-$autoloadModel = function (string $className){
-
-    $path = "../Model/$className.php";
-    if(file_exists($path)){
-        require_once $path;
-        return true;
-    }
-
-    return false;
-};
-
-$autoloadViews = function (string $className){
-
-    $path = "../Views/$className.php";
-    if(file_exists($path)){
-        require_once $path;
-        return true;
-    }
-
-    return false;
-};
-
-spl_autoload_register($autoloadCore);
-spl_autoload_register($autoloadControllers);
-spl_autoload_register($autoloadModel);
-spl_autoload_register($autoloadViews);
-
-$app = new App();
+$app = new Core\App();
 $app->run();
 
 

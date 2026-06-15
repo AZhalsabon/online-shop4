@@ -1,71 +1,86 @@
 <?php
 
-//namespace Test;
+namespace Core;
+
+use Controllers\UserController;
+use Controllers\ProductController;
+use Controllers\CartController;
 
 class App
 {
     private $routs=[
         '/registration' =>[
             'GET'=>[
-                'class'=>'UserController',
+                'class'=>UserController::class,
                 'method'=>'getRegistrate',
             ],
             'POST'=>[
-                'class'=>'UserController',
+                'class'=>UserController::class,
                 'method'=>'registrate',
             ],
 
         ],
         '/login' =>[
             'GET'=>[
-                'class'=>'UserController',
+                'class'=>UserController::class,
                 'method'=>'getLogin',
             ],
             'POST'=>[
-                'class'=>'UserController',
+                'class'=>UserController::class,
                 'method'=>'login',
             ],
 
         ],
         '/catalog' =>[
             'GET'=>[
-                'class'=>'ProductController',
+                'class'=>ProductController::class,
                 'method'=>'getDataCatalog',
             ]
         ],
         '/profile' => [
             'GET'=>[
-                'class'=>'UserController',
+                'class'=>UserController::class,
                 'method'=>'getDataProfile',
             ]
         ],
         '/edit-profile'=>[
             'GET'=>[
-                'class'=>'UserController',
+                'class'=>UserController::class,
                 'method'=>'getEditProfile'
             ],
             'POST'=>[
-                'class'=>'UserController',
+                'class'=>UserController::class,
                 'method'=>'editProfile',
             ]
 
         ],
         '/add-product'=>[
             'GET'=>[
-                'class'=>'ProductController',
+                'class'=>ProductController::class,
                 'method'=>'getAddProduct',
 
             ],
             'POST'=>[
-                'class'=>'ProductController',
+                'class'=>ProductController::class,
                 'method'=>'addProduct',
             ]
 
         ],
         '/cart'=>[
             'GET'=>[
-                'class'=>'CartController',
+                'class'=>CartController::class,
                 'method'=>'getCart'
+            ]
+        ],
+        '/order'=>[
+            'GET'=>[
+                'class'=>ProductController::class,
+                'method'=>'getOrder',
+
+            ],
+            'POST'=>[
+                'class'=>ProductController::class,
+                'method'=>'order',
             ]
         ]
     ];

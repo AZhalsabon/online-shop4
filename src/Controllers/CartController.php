@@ -1,7 +1,15 @@
 <?php
+namespace Controllers;
+
+use Model\UserProducts;
 
 class CartController
 {
+    private $cartModel;
+
+    public function __construct(){
+        $this->cartModel = new UserProducts();
+    }
     public function getCart()
     {
         if(session_status() !== PHP_SESSION_ACTIVE){
@@ -13,17 +21,12 @@ class CartController
             exit;
         }
 
-        require_once '../Model/UserProducts.php';
 
-        $productModel = new UserProducts();
-//        $products = $productModel->getUserProducts();
 
-        $dataProducts = $productModel->getdataProducts();
+        $dataProducts = $this->cartModel ->getdataProducts();
 
-//        print_r($dataProducts);
 
         require_once '../Views/cart_page.php';
 
     }
-
 }

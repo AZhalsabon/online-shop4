@@ -1,7 +1,17 @@
 <?php
+namespace Controllers;
+
+use Model\Product;
 
 class ProductController
 {
+    private $productModel;
+    public function __construct()
+    {
+        $this->productModel = new Product();
+
+    }
+
     public function getCatalog()
     {
         if(session_status() !== PHP_SESSION_ACTIVE){
@@ -29,7 +39,6 @@ class ProductController
             exit;
         }
 
-//        require_once '../Model/Product.php';
 
         $productModel = new Product();
         $products = $productModel->getProducts();
@@ -73,20 +82,14 @@ class ProductController
             $productId = $_POST['product_id'];
             $amount = $_POST['amount'];
 
-//            require_once '../Model/Product.php';
-            $productModel = new Product();
-            $data = $productModel->getUserProductByProductIdUserId($productId,$userId);
+            $data = $this->productModel->getUserProductByProductIdUserId($productId,$userId);
 
             if($data === false){
-//                require_once '../Model/Product.php';
-                $productModel = new Product();
-                $productModel->addUserProducts($productId, $userId, $amount);
+                $this->productModel->addUserProducts($productId, $userId, $amount);
             }else{
                 $amount = $amount + $data['amount'];
 
-//                require_once '../Model/Product.php';
-                $productModel = new Product();
-                $productModel->updateAmountProducts($productId, $userId, $amount);
+                $this->productModel->updateAmountProducts($productId, $userId, $amount);
 
 
             }
@@ -105,9 +108,7 @@ class ProductController
         if (isset($data['product_id'])){
             $productId = (int) $data['product_id'];
 
-//            require_once '../Model/Product.php';
-            $productModel = new Product();
-            $data = $productModel->gerProductsById($productId);
+            $data = $this->productModel->gerProductsById($productId);
 
             if($data === false){
                 $errors['product_id'] = 'Продукт не найден';
