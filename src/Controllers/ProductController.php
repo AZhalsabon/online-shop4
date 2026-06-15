@@ -29,7 +29,7 @@ class ProductController
             exit;
         }
 
-        require_once '../Model/Product.php';
+//        require_once '../Model/Product.php';
 
         $productModel = new Product();
         $products = $productModel->getProducts();
@@ -68,24 +68,23 @@ class ProductController
                 exit;
             }
 
-            $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb','user','pass');
 
             $userId = $_SESSION['userId'];
             $productId = $_POST['product_id'];
             $amount = $_POST['amount'];
 
-            require_once '../Model/Product.php';
+//            require_once '../Model/Product.php';
             $productModel = new Product();
             $data = $productModel->getUserProductByProductIdUserId($productId,$userId);
 
             if($data === false){
-                require_once '../Model/Product.php';
+//                require_once '../Model/Product.php';
                 $productModel = new Product();
                 $productModel->addUserProducts($productId, $userId, $amount);
             }else{
                 $amount = $amount + $data['amount'];
 
-                require_once '../Model/Product.php';
+//                require_once '../Model/Product.php';
                 $productModel = new Product();
                 $productModel->updateAmountProducts($productId, $userId, $amount);
 
@@ -106,7 +105,7 @@ class ProductController
         if (isset($data['product_id'])){
             $productId = (int) $data['product_id'];
 
-            require_once '../Model/Product.php';
+//            require_once '../Model/Product.php';
             $productModel = new Product();
             $data = $productModel->gerProductsById($productId);
 

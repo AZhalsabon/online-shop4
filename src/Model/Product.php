@@ -3,11 +3,11 @@ require_once"../Model/Model.php";
 
 class Product extends Model
 {
+
     public function getProducts()
     {
         $stmt = $this->PDO->query("SELECT * FROM products");
         $products = $stmt->fetchAll();
-
         return $products;
     }
 
@@ -16,7 +16,6 @@ class Product extends Model
         $stmt = $this->PDO->prepare("SELECT * FROM products WHERE id = :productId ");
         $stmt->execute(['productId'=>$productId]);
         $data = $stmt->fetch();
-
         return $data;
     }
 
@@ -35,9 +34,10 @@ class Product extends Model
         $stmt->execute(['userId'=>$userId,'productId'=>$productId,'amount'=>$amount]);
     }
 
-    public function updateAmountProducts($amount,$userId,$productId)
+    public function updateAmountProducts($productId, $userId, $amount)
     {
         $stmt = $this->PDO->prepare("UPDATE user_products SET amount = :amount WHERE user_id = :userId and product_id = :productId");
         $stmt->execute(['amount'=>$amount,'userId'=>$userId,'productId'=>$productId]);
+
     }
 }

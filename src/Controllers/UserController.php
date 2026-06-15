@@ -27,7 +27,7 @@ class UserController
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            require_once '../Model/User.php';
+//            require_once '../Model/User.php';
             $userModel = new User();
 
             $result =  $userModel->getByEmail($email);
@@ -39,7 +39,7 @@ class UserController
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            require_once '../Model/User.php';
+//            require_once '../Model/User.php';
             $userModel = new User();
 
             $userModel->addUserDb($name,$email,$hashedPassword);
@@ -99,7 +99,7 @@ class UserController
             $useremail = $_POST['useremail'];
             $password = $_POST['password'];
 
-            require_once '../Model/User.php';
+//            require_once '../Model/User.php';
             $userModel = new User();
 
             $result =  $userModel->getByEmail($useremail);
@@ -162,7 +162,7 @@ class UserController
             exit;
         }
 
-        require_once '../Model/User.php';
+//        require_once '../Model/User.php';
         $userModel = new User();
 
         $dataUser = $userModel->getBySessionId($_SESSION['userId']);
