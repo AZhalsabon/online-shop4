@@ -1,30 +1,28 @@
 <?php
+require_once"../Model/Model.php";
 
-class Product
+class Product extends Model
 {
     public function getProducts()
     {
-        $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb','user','pass');
-
-        $stmt = $pdo->query("SELECT * FROM products");
+        $stmt = $this->PDO->query("SELECT * FROM products");
         $products = $stmt->fetchAll();
+
         return $products;
     }
 
     public function gerProductsById($productId)
     {
-        $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb','user','pass');
-        $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :productId ");
+        $stmt = $this->PDO->prepare("SELECT * FROM products WHERE id = :productId ");
         $stmt->execute(['productId'=>$productId]);
         $data = $stmt->fetch();
+
         return $data;
     }
 
     public function getUserProductByProductIdUserId($productId, $userId)
     {
-        $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb','user','pass');
-
-        $stmt = $pdo->prepare("SELECT * FROM user_products WHERE product_id = :productId AND user_id = :userId");
+        $stmt = $this->PDO->prepare("SELECT * FROM user_products WHERE product_id = :productId AND user_id = :userId");
         $stmt->execute(['productId'=>$productId, 'userId'=>$userId]);
         $data = $stmt->fetch();
 
@@ -33,21 +31,13 @@ class Product
 
     public function addUserProducts($productId, $userId,$amount)
     {
-        $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb','user','pass');
-
-        $stmt = $pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:userId,:productId,:amount)");
+        $stmt = $this->PDO->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:userId,:productId,:amount)");
         $stmt->execute(['userId'=>$userId,'productId'=>$productId,'amount'=>$amount]);
     }
 
     public function updateAmountProducts($amount,$userId,$productId)
     {
-        $pdo = new PDO('pgsql:host=postgres_db;port=5432;dbname=mydb','user','pass');
-
-        $stmt = $pdo->prepare("UPDATE user_products SET amount = :amount WHERE user_id = :userId and product_id = :productId");
+        $stmt = $this->PDO->prepare("UPDATE user_products SET amount = :amount WHERE user_id = :userId and product_id = :productId");
         $stmt->execute(['amount'=>$amount,'userId'=>$userId,'productId'=>$productId]);
-
     }
-
-
-
 }

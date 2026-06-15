@@ -70,28 +70,44 @@ class App
 
     public function run()
     {
-        require_once '../Controllers/UserController.php';
-        require_once '../Controllers/ProductController.php';
-        require_once '../Controllers/CartController.php';
-
-
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-        $routsMethod = $this->routs[$requestUri];
+        if(isset($this->routs[$requestUri])){
+            $routeMethod = $this->routs[$requestUri];
 
-        $handler = $routsMethod[$requestMethod];
+            if(isset($routeMethod)){
 
-        $class = $handler['class'];
-        $method = $handler['method'];
+                $handler = $routeMethod[$requestMethod];
 
-        $controller = new $class();
-        $controller->$method();
+                $class = $handler['class'];
+                $method = $handler['method'];
 
+                require_once "../Controllers/$class.php";
+
+
+                $controller = new $class();
+                $controller->$method();
+
+            }else{
+                echo "$requestMethod не поддерживается для $requestUri";
+            }
+        }else{
+            http_response_code(404);
+            require_once '../Views/404.php';
+        }
     }
 }
 
-
+//        $routsMethod = $this->routs[$requestUri];
+//
+//        $handler = $routsMethod[$requestMethod];
+//
+//        $class = $handler['class'];
+//        $method = $handler['method'];
+//
+//        $controller = new $class();
+//        $controller->$method();
 
 
 //    public function run()
