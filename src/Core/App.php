@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Controllers\OrderController;
 use Controllers\UserController;
 use Controllers\ProductController;
 use Controllers\CartController;
@@ -72,15 +73,15 @@ class App
                 'method'=>'getCart'
             ]
         ],
-        '/order'=>[
+        '/create-order'=>[
             'GET'=>[
-                'class'=>ProductController::class,
-                'method'=>'getOrder',
+                'class'=>OrderController::class,
+                'method'=>'getCheckoutOrderForm',
 
             ],
             'POST'=>[
-                'class'=>ProductController::class,
-                'method'=>'order',
+                'class'=>OrderController::class,
+                'method'=>'handleCheckoutOrder',
             ]
         ]
     ];
@@ -114,101 +115,3 @@ class App
     }
 }
 
-//        $routsMethod = $this->routs[$requestUri];
-//
-//        $handler = $routsMethod[$requestMethod];
-//
-//        $class = $handler['class'];
-//        $method = $handler['method'];
-//
-//        $controller = new $class();
-//        $controller->$method();
-
-
-//    public function run()
-//    {
-//
-//        $requestUri = $_SERVER['REQUEST_URI'];
-//        $requestMethod = $_SERVER['REQUEST_METHOD'];
-//
-//
-//        if ($requestUri === '/registration'){
-//            require_once '../Controllers/UserController.php';
-//            $user = new UserController();
-//
-//            if($requestMethod === 'GET'){
-//                $user->getRegistrate();
-//            }elseif($requestMethod === 'POST'){
-//                $user->registrate();
-//            }else{
-//                echo "$requestMethod для адреса $requestUri  не поддерживается";
-//            }
-//
-//
-//        }elseif ($requestUri === '/login'){
-//            require_once '../Controllers/UserController.php';
-//            $user = new UserController();
-//
-//            if($requestMethod ==='GET'){
-//                $user->getLogin();
-//            }elseif($requestMethod === 'POST'){
-//                $user->login();
-//            }else{
-//                echo "$requestMethod для адреса $requestUri  не поддерживается";
-//            }
-//
-//        }elseif($requestUri === '/catalog'){
-//            require_once '../Controllers/ProductController.php';
-//            $product = new ProductController();
-//
-//            if ($requestMethod === 'GET'){
-//                $product->getDataCatalog();
-//            }elseif($requestMethod === 'POST'){
-//                $product->getCatalog();
-//            }else{
-//                echo "$requestMethod для адреса $requestUri  не поддерживается";
-//            }
-//
-//        }elseif($requestUri === '/profile'){
-//            require_once '../Controllers/UserController.php';
-//            $user = new UserController();
-//
-//            if($requestMethod === 'GET'){
-//                $user->getDataProfile();
-//            }elseif($requestMethod === 'POST'){
-//                $user->getProfile();
-//            }else{
-//                echo "$requestMethod для адреса $requestUri  не поддерживается";
-//            }
-//
-//        }elseif($requestUri === '/edit-profile'){
-//            require_once '../Controllers/UserController.php';
-//            $user = new UserController();
-//
-//            if($requestMethod === 'GET'){
-//                $user->getEditProfile();
-//            }elseif($requestMethod === 'POST'){
-//                $user->editProfile();
-//            }else{
-//                echo "$requestMethod для адреса $requestUri  не поддерживается";
-//            }
-//
-//        }elseif($requestUri === '/add-product') {
-//            require_once '../Controllers/ProductController.php';
-//            $product = new ProductController();
-//
-//            if ($requestMethod === 'GET') {
-//                $product->getAddProduct();
-//            } elseif ($requestMethod === 'POST') {
-//                $product->addProduct();;
-//            } else {
-//                echo "$requestMethod для адреса $requestUri  не поддерживается";
-//            }
-//
-//
-//        }else{
-//            http_response_code(404);
-//            require_once './404.php';
-//        }
-//
-//    }

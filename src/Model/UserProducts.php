@@ -3,7 +3,7 @@
 namespace Model;
 class UserProducts extends Model
 {
-    public function getUserProducts()
+    public function getUserProducts(): array
     {
         $userId = $_SESSION['userId'];
 
@@ -30,4 +30,13 @@ class UserProducts extends Model
         }
         return $products;
     }
+
+    public function deleteByUserId(int $userId)
+    {
+        $stmt = $this-> PDO->prepare("DELETE FROM user_products WHERE user_id = :userId");
+        $stmt->execute(['userId' =>$userId]);
+
+    }
+
+
 }
