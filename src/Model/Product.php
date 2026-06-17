@@ -11,7 +11,7 @@ class Product extends Model
         return $products;
     }
 
-    public function gerProductsById($productId)
+    public function getProductsById($productId)
     {
         $stmt = $this->PDO->prepare("SELECT * FROM products WHERE id = :productId ");
         $stmt->execute(['productId'=>$productId]);
@@ -40,4 +40,5 @@ class Product extends Model
         $stmt->execute(['amount'=>$amount,'userId'=>$userId,'productId'=>$productId]);
 
     }
+
 }

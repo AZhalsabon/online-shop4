@@ -13,4 +13,11 @@ class OrderProduct extends Model
         $stmt->execute(['orderId'=>$orderId,'productId'=>$productId,'amount'=>$amount]);
     }
 
+    public function getAllByOrderId(int $orderId){
+        $stmt = $this->PDO->prepare("SELECT * FROM order_products WHERE order_id = :orderId");
+        $stmt->execute(['orderId'=>$orderId]);
+        $data = $stmt->fetchAll();
+        return $data;
+    }
+
 }

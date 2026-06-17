@@ -26,6 +26,17 @@ class Order extends Model
         return $data['id'];
     }
 
+    public function getAllByUserId($userId){
+        $stmt = $this->PDO->prepare(
+            "SELECT * FROM orders WHERE user_id = :userId"
+        );
+        $stmt->execute([
+            "userId"=>$userId
+        ]);
+        $data = $stmt->fetchAll();
+        return $data;
+    }
+
 
 
 

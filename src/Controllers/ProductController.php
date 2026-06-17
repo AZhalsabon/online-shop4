@@ -108,7 +108,7 @@ class ProductController
         if (isset($data['product_id'])){
             $productId = (int) $data['product_id'];
 
-            $data = $this->productModel->gerProductsById($productId);
+            $data = $this->productModel->getProductsById($productId);
 
             if($data === false){
                 $errors['product_id'] = 'Продукт не найден';

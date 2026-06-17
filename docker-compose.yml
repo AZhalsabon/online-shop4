@@ -23,5 +23,5 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - 54324:5432
+      - 54323:5432
 

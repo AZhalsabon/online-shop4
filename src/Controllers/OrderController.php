@@ -3,13 +3,17 @@
 namespace Controllers;
 
 use Model\Order;
+use Model\Product;
 use Model\UserProducts;
 use Model\OrderProduct;
+
 
 
 class OrderController
 {
     private $orderModel;
+
+    private $productModel;
     private $userProductsModel;
     private $orderProductModel;
     public function __construct()
@@ -17,6 +21,7 @@ class OrderController
         $this->orderModel = new Order();
         $this->userProductsModel = new UserProducts();
         $this->orderProductModel = new OrderProduct();
+        $this->productModel = new Product();
 
     }
     public function getCheckoutOrderForm()
@@ -84,6 +89,8 @@ class OrderController
             $this->userProductsModel->deleteByUserId($userId);
 
 
+
+
         }else{
             require_once "../Views/order_page.php";
         }
@@ -96,6 +103,120 @@ class OrderController
 
 
         return $errors;
+    }
+
+//    public function getAllOrders(){
+//
+//        if(session_status() !== PHP_SESSION_ACTIVE){
+//            session_start();
+//        }
+//
+//        if (!isset($_SESSION['userId'])) {
+//            header("Location: /login");
+//            exit;
+//        }
+//
+//        $userId  = $_SESSION['userId'];
+//
+//        //получаю все заказы пользователя по userId
+//        $userOrders = $this->orderModel->getAllByUserId($userId);
+//
+//        $allOrders = [];
+//
+//
+//        foreach ($userOrders as $userOrder){
+//
+//            $newOrderProduct[] = $userOrder;
+//
+//
+//            $orderId = $userOrder['id'];
+//
+//            $orderProducts = $this->orderProductModel->getAllByOrderId($orderId);
+//
+//            $products = [];
+//
+//            foreach ($orderProducts as $orderProduct){
+//                $productId = $orderProduct['product_id'];
+//
+//                $dataProduct = $this->productModel->getProductsById($productId);
+//
+//                $orderProduct['product_name'] = $dataProduct['name'];
+//                $orderProduct['description'] = $dataProduct['description'];
+//                $orderProduct['price'] = $dataProduct['price'];
+//                $orderProduct['image_url'] = $dataProduct['image_url'];
+//                $orderProduct['total_price'] = $dataProduct["price"]* $orderProduct['amount'];
+//
+//                $products[] = $orderProduct;
+//
+//            }
+//            $userOrder['order_products'] = $newOrderProduct;
+//            $allOrders = $userOrder;
+//
+//
+//        }
+//        print_r($allOrders);
+//
+//        require_once "../Views/user_order_page.php";
+//
+//
+//
+//
+//
+//    }
+
+    public function getAllOrders() {
+        if(session_status() !== PHP_SESSION_ACTIVE){
+            session_start();
+        }
+
+        if (!isset($_SESSION['userId'])) {
+            header("Location: /login");
+            exit;
+        }
+
+        $userId  = $_SESSION['userId'];
+
+        // получаю все заказы пользователя по userId
+        $userOrders = $this->orderModel->getAllByUserId($userId);
+
+        $allOrders = []; // массив всех заказов
+
+        foreach ($userOrders as $userOrder) {
+            $newOrderProduct = []; // товары в текущем заказе
+
+            $orderId = $userOrder['id'];
+
+            $orderProducts = $this->orderProductModel->getAllByOrderId($orderId);
+
+            foreach ($orderProducts as $orderProduct) {
+                $productId = $orderProduct['product_id'];
+
+                $dataProduct = $this->productModel->getProductsById($productId); // исправлено имя метода
+
+                $orderProduct['product_name'] = $dataProduct['name'];
+                $orderProduct['description'] = $dataProduct['description'];
+                $orderProduct['price'] = $dataProduct['price'];
+                $orderProduct['image_url'] = $dataProduct['image_url'];
+                $orderProduct['total_price'] = $dataProduct["price"] * $orderProduct['amount'];
+
+
+                $newOrderProduct[] = $orderProduct;
+            }
+
+            $userOrder['order_products'] = $newOrderProduct;
+
+            $totalOrderPrice = 0;
+            foreach ($newOrderProduct as $prod) {
+                $totalOrderPrice += $prod['total_price'];
+            }
+            $userOrder['total_price'] = $totalOrderPrice;
+
+            $allOrders[] = $userOrder; // добавляем в список всех заказов
+        }
+
+//        print_r($allOrders);
+
+        require_once "../Views/user_order_page.php";
     }
 
 }

@@ -12,6 +12,7 @@
     <div class="logo">🛍️ ShopLy</div>
 
     <a href="/cart">коризина</a>
+    <a href="/orders">Мои заказы</a>
     <a href="/catalog">Каталог</a>
 </header>
 

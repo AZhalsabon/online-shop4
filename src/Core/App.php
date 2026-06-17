@@ -9,90 +9,16 @@ use Controllers\CartController;
 
 class App
 {
-    private $routs=[
-        '/registration' =>[
-            'GET'=>[
-                'class'=>UserController::class,
-                'method'=>'getRegistrate',
-            ],
-            'POST'=>[
-                'class'=>UserController::class,
-                'method'=>'registrate',
-            ],
+    private $routes=[];
 
-        ],
-        '/login' =>[
-            'GET'=>[
-                'class'=>UserController::class,
-                'method'=>'getLogin',
-            ],
-            'POST'=>[
-                'class'=>UserController::class,
-                'method'=>'login',
-            ],
-
-        ],
-        '/catalog' =>[
-            'GET'=>[
-                'class'=>ProductController::class,
-                'method'=>'getDataCatalog',
-            ]
-        ],
-        '/profile' => [
-            'GET'=>[
-                'class'=>UserController::class,
-                'method'=>'getDataProfile',
-            ]
-        ],
-        '/edit-profile'=>[
-            'GET'=>[
-                'class'=>UserController::class,
-                'method'=>'getEditProfile'
-            ],
-            'POST'=>[
-                'class'=>UserController::class,
-                'method'=>'editProfile',
-            ]
-
-        ],
-        '/add-product'=>[
-            'GET'=>[
-                'class'=>ProductController::class,
-                'method'=>'getAddProduct',
-
-            ],
-            'POST'=>[
-                'class'=>ProductController::class,
-                'method'=>'addProduct',
-            ]
-
-        ],
-        '/cart'=>[
-            'GET'=>[
-                'class'=>CartController::class,
-                'method'=>'getCart'
-            ]
-        ],
-        '/create-order'=>[
-            'GET'=>[
-                'class'=>OrderController::class,
-                'method'=>'getCheckoutOrderForm',
-
-            ],
-            'POST'=>[
-                'class'=>OrderController::class,
-                'method'=>'handleCheckoutOrder',
-            ]
-        ]
-    ];
 
     public function run()
     {
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-        if(isset($this->routs[$requestUri])){
-            $routeMethod = $this->routs[$requestUri];
+        if(isset($this->routes[$requestUri])){
+            $routeMethod = $this->routes[$requestUri];
 
             if(isset($routeMethod)){
 
@@ -113,5 +39,32 @@ class App
             require_once '../Views/404.php';
         }
     }
+
+    public function addRoutes(string $route,string $routeMethod,string $className,string $method)
+    {
+        $this->routes[$route][$routeMethod] = [
+            'class'=>$className,
+            'method'=>$method,
+        ];
+    }
+
+    public function get(string $route,string $className,string $method)
+    {
+        $this->routes[$route]['GET'] = [
+            'class'=>$className,
+            'method'=>$method,
+        ];
+    }
+    public function post(string $route,string $className,string $method)
+    {
+        $this->routes[$route]['POST'] = [
+            'class'=>$className,
+            'method'=>$method,
+        ];
+    }
+
+
+
+
 }
 

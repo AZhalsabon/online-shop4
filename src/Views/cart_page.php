@@ -13,7 +13,8 @@
         <input type="text" placeholder="Поиск товаров...">
     </div>
     <a href="/profile">Мой профиль</a>
-    <a href="/cart">Корзина</a>
+    <a href="/orders">Мои заказы</a>
+    <a href="/catalog">Каталог</a>
 
 </header>
 
