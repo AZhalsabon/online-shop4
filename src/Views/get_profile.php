@@ -21,8 +21,8 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="avatar">🙂</div>
-        <h3 class="user-name"><?php echo $dataUser['name']?></h3>
-        <p class="user-email"><?php echo $dataUser['email']?></p>
+        <h3 class="user-name"><?php echo $dataUser->getName()?></h3>
+        <p class="user-email"><?php echo $dataUser->getEmail()?></p>
 
         <nav class="nav">
             <a href="#" class="active"><span class="icon">👤</span> Профиль</a>

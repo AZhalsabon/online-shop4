@@ -30,21 +30,21 @@
 
                 <div class="card-image">
                     <div class="badge">Новинка</div>
-                    <img src="<?php echo $product['image_url']?>">
+                    <img src="<?php echo $product->getImageUrl();?>">
                 </div>
                 <div class="card-body">
-                    <div class="card-category"><?php echo $product['name']?></div>
-                    <h3 class="card-title"><?php echo $product['description']?></h3>
+                    <div class="card-category"><?php echo $product->getName()?></div>
+                    <h3 class="card-title"><?php echo $product->getDescription()?></h3>
                     <div class="card-rating">★★★★★ <span>(128)</span></div>
                     <div class="card-footer">
-                        <div class="price"><?php echo $product['price']?></div>
+                        <div class="price"><?php echo $product->getPrice()?></div>
                         <button class="add-btn">В корзину</button>
                     </div>
                 </div>
             </div>
             <form action="/add-product" method="POST">
 
-                <input type="hidden" name="product_id" placeholder="Ваше product_id" value="<?php echo $product['id']  ?>">
+                <input type="hidden" name="product_id" placeholder="Ваше product_id" value="<?php echo $product->getId()  ?>">
 
                 <label for="amount">amount </label>
                 <?php if (isset($errors['amount'])):?>

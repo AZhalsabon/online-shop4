@@ -41,7 +41,7 @@ class UserController
 
             $result =  $this->userModel->getByEmail($email);
 
-            if($result !== false){
+            if($result !== null){
                 $errors['email'] = "Этот email уже зарегистрирован.";
                 require_once '../Views/get_registration.php';
             }
@@ -113,11 +113,11 @@ class UserController
             if ($result === false){
                 $errors['useremail'] = 'email incorrect';
             }else{
-                $passwordDb = $result['password'];
+                $passwordDb = $result->getPassword();
 
                 if (password_verify($password, $passwordDb)){
                     session_start();
-                    $_SESSION['userId'] = $result['id'];
+                    $_SESSION['userId'] = $result->getId();
                     header("Location: /catalog");
                     exit;
 
@@ -209,11 +209,11 @@ class UserController
 
             $userData = $this->userModel->getBySessionId($userId);
 
-            if($userData['name'] !== $newName){
+            if($userData->getName() !== $newName){
                 $this->userModel->updateNameById($newName, $userId);
             }
 
-            if($userData['email'] !== $newEmail){
+            if($userData->getEmail() !== $newEmail){
                 $this->userModel->updateEmailById($newEmail, $userId);
             }
 
@@ -248,7 +248,7 @@ class UserController
 
             $user =  $this->userModel->getByEmail($data['email']);
 
-            if ($user['id'] !== $userId){
+            if ($user->getId() !== $userId){
                 $errors = "Этот Email уже занят";
             }
         }

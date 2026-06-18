@@ -84,10 +84,10 @@ class ProductController
 
             $data = $this->productModel->getUserProductByProductIdUserId($productId,$userId);
 
-            if($data === false){
+            if($data === null){
                 $this->productModel->addUserProducts($productId, $userId, $amount);
             }else{
-                $amount = $amount + $data['amount'];
+                $amount = $amount + $data->getAmount();
 
                 $this->productModel->updateAmountProducts($productId, $userId, $amount);
 
@@ -108,9 +108,9 @@ class ProductController
         if (isset($data['product_id'])){
             $productId = (int) $data['product_id'];
 
-            $data = $this->productModel->getProductsById($productId);
+            $products = $this->productModel->getProductsById($productId);
 
-            if($data === false){
+            if($products === false){
                 $errors['product_id'] = 'Продукт не найден';
             }
 
@@ -118,9 +118,9 @@ class ProductController
             $errors['product_id'] = "id продукта должен быть указан";
         }
 
-        if(isset($data['amount'])){
-            $amount = (int) $data['amount'];
-        }
+//        if(isset($data['amount'])){
+//            $amount = (int) $data['amount'];
+//        }
 
 
         return $errors;

@@ -78,12 +78,13 @@ class OrderController
 
             $orderId = $this->orderModel->addOrder($contactName,$contactNumber,$comment,$address,$userId);
 
+
             $userProducts = $this->userProductsModel->getUserProducts();
 
             foreach ($userProducts as $userProduct){
-                $productId = $userProduct['product_id'];
-                $amount = $userProduct['amount'];
-                $this->orderProductModel->create($orderId,$productId,$amount);
+                $productId = $userProduct->getProductId();
+                $amount = $userProduct->getAmount();
+                $this->orderProductModel->create($orderId->getId(),$productId,$amount);
             }
 
             $this->userProductsModel->deleteByUserId($userId);
@@ -184,34 +185,52 @@ class OrderController
         foreach ($userOrders as $userOrder) {
             $newOrderProduct = []; // товары в текущем заказе
 
-            $orderId = $userOrder['id'];
+            $orderId = $userOrder->getId();
 
             $orderProducts = $this->orderProductModel->getAllByOrderId($orderId);
 
             foreach ($orderProducts as $orderProduct) {
-                $productId = $orderProduct['product_id'];
+                $productId = $orderProduct->getProductId();
+
 
                 $dataProduct = $this->productModel->getProductsById($productId); // исправлено имя метода
 
-                $orderProduct['product_name'] = $dataProduct['name'];
-                $orderProduct['description'] = $dataProduct['description'];
-                $orderProduct['price'] = $dataProduct['price'];
-                $orderProduct['image_url'] = $dataProduct['image_url'];
-                $orderProduct['total_price'] = $dataProduct["price"] * $orderProduct['amount'];
+                $newOrderProduct[] = [
+                    'product_name' => $dataProduct->getName(),
+                    'description'  => $dataProduct->getDescription(),
+                    'price'        => $dataProduct->getPrice(),
+                    'image_url'    => $dataProduct->getImageUrl(),
+                    'amount'       => $orderProduct->getAmount(),
+                    'total_price'  => $dataProduct->getPrice() * $orderProduct->getAmount(),
+                ];
 
-
-                $newOrderProduct[] = $orderProduct;
+//                $orderProduct['product_name'] = $dataProduct->getName();
+//                $orderProduct['description'] = $dataProduct->getDescription();
+//                $orderProduct['price'] = $dataProduct->getPrice();
+//                $orderProduct['image_url'] = $dataProduct->getImageUrl();
+//                $orderProduct['total_price'] = $dataProduct->getPrice() * $orderProduct->getAmount();
+//
+//
+//                $newOrderProduct[] = $orderProduct;
             }
-
-            $userOrder['order_products'] = $newOrderProduct;
-
             $totalOrderPrice = 0;
             foreach ($newOrderProduct as $prod) {
                 $totalOrderPrice += $prod['total_price'];
             }
-            $userOrder['total_price'] = $totalOrderPrice;
+            $allOrders[] = [
+                'id' => $userOrder->getId(),
+                'order_products' => $newOrderProduct,
+                'total_price' => $totalOrderPrice,
+            ];
 
-            $allOrders[] = $userOrder; // добавляем в список всех заказов
+//            $userOrder['order_products'] = $newOrderProduct;
+//
+//            $totalOrderPrice = 0;
+//            foreach ($newOrderProduct as $prod) {
+//                $totalOrderPrice += $prod['total_price'];
+//            }
+//            $userOrder['total_price'] = $totalOrderPrice;
+
         }
 
 //        print_r($allOrders);

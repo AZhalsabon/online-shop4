@@ -3,14 +3,56 @@
 namespace Model;
 class UserProducts extends Model
 {
+    private $id;
+    private $productId;
+    private $userId;
+    private $amount;
+
     public function getUserProducts(): array
     {
         $userId = $_SESSION['userId'];
 
         $stmt = $this->PDO->query("SELECT * FROM user_products WHERE user_id = {$userId}");
 
-        return $stmt->fetchAll();
+        //get\
+
+        $data = $stmt->fetchAll();
+
+        $userProducts = [];
+
+        foreach ($data as $userProduct){
+            $obj = new self();
+            $obj->id = $userProduct["id"];
+            $obj->productId = $userProduct["product_id"];
+            $obj->userId = $userProduct["user_id"];
+            $obj->amount = $userProduct["amount"];
+
+            $userProducts[]=$obj;
+
+        }
+
+        return $userProducts;
+
+
     }
+//    public function getdataProducts()
+//    {
+//        $products = [];
+//
+//        $userProducts = $this->getUserProducts();
+//
+//        foreach ($userProducts as $userProduct){
+//            $productsId = $userProduct['product_id'];
+//            $stmt = $this->PDO->query("SELECT * FROM products WHERE id ={$productsId}");
+//            $product = $stmt->fetch();
+//
+//            $product['amount'] = $userProduct['amount'];
+//
+//            $products[] = $product;
+//
+//        }
+//        return $products;
+//    }
 
     public function getdataProducts()
     {
@@ -19,15 +61,18 @@ class UserProducts extends Model
         $userProducts = $this->getUserProducts();
 
         foreach ($userProducts as $userProduct){
-            $productsId = $userProduct['product_id'];
+            $productsId = $userProduct->getProductId();
+
             $stmt = $this->PDO->query("SELECT * FROM products WHERE id ={$productsId}");
             $product = $stmt->fetch();
 
-            $product['amount'] = $userProduct['amount'];
+            $product['amount'] = $userProduct->getAmount();
 
             $products[] = $product;
 
         }
+
+        //get
         return $products;
     }
 
@@ -36,6 +81,38 @@ class UserProducts extends Model
         $stmt = $this-> PDO->prepare("DELETE FROM user_products WHERE user_id = :userId");
         $stmt->execute(['userId' =>$userId]);
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductId()
+    {
+        return $this->productId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAmount()
+    {
+        return $this->amount;
     }
 
 

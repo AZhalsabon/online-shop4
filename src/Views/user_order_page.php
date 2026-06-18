@@ -62,64 +62,7 @@
 </div>
 </body>
 </html>
-<!--<html lang="ru">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Мои заказы</title>-->
-<!---->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="container">-->
-<!---->
-<!--    <div class="header">-->
-<!--        <h1>Мои заказы</h1>-->
-<!--        <span>4 заказа</span>-->
-<!--    </div>-->
-<!---->
-<!--    <div class="filters">-->
-<!--        <div class="filter-btn active">Все</div>-->
-<!--        <div class="filter-btn">В доставке</div>-->
-<!--        <div class="filter-btn">Доставлено</div>-->
-<!--        <div class="filter-btn">Отменено</div>-->
-<!--    </div>-->
-<!---->
-<!--    <div class="orders">-->
-<!---->
-<!--        --><?php // foreach ($allOrders as $orderProduct):?>
-<!---->
-<!--        <!-- Заказ 1: В доставке -->-->
-<!--        < class="order">-->
-<!--            <div class="order-top">-->
-<!--                <div>-->
-<!--                    <div class="order-title">-->
-<!--                        <span>Заказ --><?php //echo$orderProduct['order_id']?><!--</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            --><?php //foreach ($orderProduct['order_products'] as $product): ?>
-<!--            <div class="items">-->
-<!--                <div class="item">-->
-<!--                    <div class="item-img">👟</div>-->
-<!--                    <div class="item-info">-->
-<!--                        <div class="item-name">--><?php //$product['name']?><!--</div>-->
-<!--                        <div class="item-qty">--><?php //$product['description']?><!--</div>-->
-<!--                    </div>-->
-<!--                    <div class="item-price">--><?php //$product['price']?><!--</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <hr class="divider">-->
-<!--            <div class="order-footer">-->
-<!--                <span class="label">Итого</span>-->
-<!--                <span class="order-total">--><?php //$product['total_price']?><!--</span>-->
-<!--            </div>-->
-<!--        --><?php //endforeach; ?>
-<!--        </div>-->
-<!--        --><?php //endforeach;?>
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
+
 
 <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
