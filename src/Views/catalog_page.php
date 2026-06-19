@@ -25,6 +25,7 @@
 
     <div class="grid">
 
+
         <?php foreach ($products as $product):?>
             <div class="card">
 
@@ -42,18 +43,48 @@
                     </div>
                 </div>
             </div>
+<!--            <div class="card">-->
+<!---->
+<!--                <div class="card-image">-->
+<!--                    <div class="badge">Новинка</div>-->
+<!--                    <img src="--><?php //echo $product->getImageUrl();?><!--">-->
+<!--                </div>-->
+<!--                <div class="card-body">-->
+<!--                    <div class="card-category">--><?php //echo $product->getName()?><!--</div>-->
+<!--                    <h3 class="card-title">--><?php //echo $product->getDescription()?><!--</h3>-->
+<!--                    <div class="card-rating">★★★★★ <span>(128)</span></div>-->
+<!--                    <div class="card-footer">-->
+<!--                        <div class="price">--><?php //echo $product->getPrice()?><!--</div>-->
+<!--                        <button class="add-btn">В корзину</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+            
+        <div class="buttons-group">
             <form action="/add-product" method="POST">
 
                 <input type="hidden" name="product_id" placeholder="Ваше product_id" value="<?php echo $product->getId()  ?>">
 
-                <label for="amount">amount </label>
-                <?php if (isset($errors['amount'])):?>
-                    <label style="color: red"><?php echo $errors['amount']?></label>
-                <?php endif; ?>
-                <input type="text" name="amount" placeholder="amount" >
 
-                <button type="submit">add product</button>
+                <input type="hidden" name="amount" placeholder="amount" value="1">
+
+                <button class="quantity-btn plus" type="submit">+</button>
+
             </form>
+
+            <form action="add-product" method="POST">
+
+                <input type="hidden" name="product_id" placeholder="Ваше product_id" value="<?php echo $product->getId()  ?>">
+
+<!--                <label for="amount">amount </label>-->
+
+                <input type="hidden" name="amount" placeholder="amount" value="-1">
+
+
+                <button class="quantity-btn minus" type="submit">-</button>
+
+            </form>
+        </div>
         <?php endforeach;?>
         <!--        <div class="card">-->
         <!---->
@@ -81,6 +112,27 @@
 </html>
 
 <style>
+    .quantity-btn {
+        padding: 6px 12px;          /* Размеры кнопки */
+        background-color: #4CAF50;  /* Цвет фона */
+        color: white;               /* Текст */
+        border: none;               /* Без рамки */
+        border-radius: 4px;         /* Скругление углов */
+        cursor: pointer;            /* Курсор-указатель при наведении */
+        font-size: 16px;            /* Размер шрифта */
+        transition: background-color 0.3s; /* Плавное переключение цвета */
+    }
+
+    .quantity-btn:hover {
+        background-color: #45a049; /* Более тёмный оттенок при наведении */
+    }
+
+    .buttons-group {
+        display: flex;             /* Располагаем элементы в строку */
+        gap: 8px;                  /* Расстояние между кнопками */
+        align-items: center;       /* Выравнивание по вертикали */
+    }
+
     * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
     body {
         margin: 0;

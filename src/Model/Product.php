@@ -82,15 +82,26 @@ class Product extends Model
 
     public function addUserProducts($productId, $userId,$amount)
     {
-        $stmt = $this->PDO->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:userId,:productId,:amount)");
-        $stmt->execute(['userId'=>$userId,'productId'=>$productId,'amount'=>$amount]);
+        if ($amount > 0){
+            $stmt = $this->PDO->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:userId,:productId,:amount)");
+            $stmt->execute(['userId'=>$userId,'productId'=>$productId,'amount'=>$amount]);
+        }
     }
 
     public function updateAmountProducts($productId, $userId, $amount)
     {
+        if($amount <= 0){
+            $this->removeUserProduct($productId, $userId);
+        }
         $stmt = $this->PDO->prepare("UPDATE user_products SET amount = :amount WHERE user_id = :userId and product_id = :productId");
         $stmt->execute(['amount'=>$amount,'userId'=>$userId,'productId'=>$productId]);
 
+    }
+
+    public function removeUserProduct($productId, $userId)
+    {
+        $stmt = $this->PDO->prepare("DELETE FROM user_products WHERE user_id = :userId AND product_id = :productId");
+        return $stmt->execute(['userId' => $userId, 'productId' => $productId]);
     }
 
     /**

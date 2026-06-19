@@ -32,10 +32,14 @@ $app->get('/edit-profile',UserController::class,'getEditProfile');
 $app->post('/edit-profile',UserController::class,'editProfile');
 $app->get('/add-product',ProductController::class,'getAddProduct');
 $app->post('/add-product',ProductController::class,'addProduct');
+
+$app->post('/decrease-product',ProductController::class,'decreaseProduct');
+
 $app->get('/cart',CartController::class,'getCart');
 $app->get('/create-order',OrderController::class,'getCheckoutOrderForm');
 $app->post('/create-order',OrderController::class,'handleCheckoutOrder');
 $app->addRoutes('/orders','GET',OrderController::class,'getAllOrders');
+
 
 $app->run();
 

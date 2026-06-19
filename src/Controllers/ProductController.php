@@ -2,13 +2,19 @@
 namespace Controllers;
 
 use Model\Product;
+use Model\UserProducts;
+
 
 class ProductController
 {
     private $productModel;
+    private $cartModel;
+
     public function __construct()
     {
         $this->productModel = new Product();
+        $this->cartModel = new UserProducts();
+
 
     }
 
@@ -22,6 +28,8 @@ class ProductController
             header("Location: /login");
             exit;
         }
+
+
 
         require_once '../Views/catalog_page.php';
 
@@ -40,8 +48,8 @@ class ProductController
         }
 
 
-        $productModel = new Product();
-        $products = $productModel->getProducts();
+        $products = $this->productModel->getProducts();
+
 
         require_once '../Views/catalog_page.php';
 
@@ -59,6 +67,41 @@ class ProductController
         }
 
         require_once '../Views/add_product_form.php';
+    }
+
+
+    public function decreaseProduct()
+    {
+        if(session_status() !== PHP_SESSION_ACTIVE){
+            session_start();
+        }
+
+        if (!isset($_SESSION['userId'])) {
+            header("Location: /login");
+            exit;
+        }
+        $userId = $_SESSION['userId'];
+        $productId = $_POST['product_id'];
+        $amount = $_POST['amount'];
+
+
+
+
+
+//        $data = $this->productModel->getUserProductByProductIdUserId($productId,$userId);
+//
+//        if($data === null){
+//            $this->productModel->addUserProducts($productId, $userId, $amount);
+//        }else{
+//            $amount = $amount + $data->getAmount();
+//
+//            $this->productModel->updateAmountProducts($productId, $userId, $amount);
+//
+//
+//        }
+
+        header("Location: /cart");
+
     }
 
 
@@ -93,6 +136,7 @@ class ProductController
 
 
             }
+
 
             header("Location: /cart");
 
