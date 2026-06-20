@@ -4,28 +4,22 @@ namespace Controllers;
 
 use Model\User;
 
-class UserController
+class UserController extends BaseController
 {
-    private $userModel;
 
+    private $userModel;
     public function __construct()
     {
+        parent::__construct();
         $this->userModel = new User();
     }
 
     public function getRegistrate()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-
-        if (!isset($_SESSION['userId'])) {
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
-
-
-
         require_once '../Views/get_registration.php';
     }
 
@@ -106,24 +100,13 @@ class UserController
             $useremail = $_POST['useremail'];
             $password = $_POST['password'];
 
+            $result = $this->authService->auth($useremail,$password);
 
-
-            $result =  $this->userModel->getByEmail($useremail);
-
-            if ($result === false){
-                $errors['useremail'] = 'email incorrect';
+            if ($result === true){
+                header("Location: /catalog");
+                exit;
             }else{
-                $passwordDb = $result->getPassword();
-
-                if (password_verify($password, $passwordDb)){
-                    session_start();
-                    $_SESSION['userId'] = $result->getId();
-                    header("Location: /catalog");
-                    exit;
-
-                }else{
-                    $errors['useremail'] = 'email or password incorrect';
-                }
+                $errors['useremail'] = 'email or password incorrect';
             }
         }
         require_once "../Views/get_login.php";
@@ -144,10 +127,7 @@ class UserController
 
     public function getProfile()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-        if (!isset($_SESSION['userId'])) {
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
@@ -156,31 +136,21 @@ class UserController
 
     public function getDataProfile()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-        if (!isset($_SESSION['userId'])) {
-            header("Location: /login");
-            exit;
-        }
-        if (!isset($_SESSION['userId'])) {
+
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
 
-
-        $dataUser = $this->userModel->getBySessionId($_SESSION['userId']);
+//        $dataUser = $this->userModel->getBySessionId($_SESSION['userId']);
+        $dataUser = $this->authService->getCurrentUser();
 
         require_once '../Views/get_profile.php';
     }
 
     public function getEditProfile()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-
-        if (!isset($_SESSION['userId'])) {
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
@@ -191,11 +161,7 @@ class UserController
     {
         $errors = $this->validateEditProfile($_POST);
 
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-
-        if (!isset($_SESSION['userId'])) {
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
@@ -203,18 +169,17 @@ class UserController
         if(empty($errors)){
             $newName = $_POST['name'];
             $newEmail = $_POST['email'];
-            $userId = $_SESSION['userId'];
+            $user = $this->authService->getCurrentUser();
 
             require_once '../Model/User.php';
 
-            $userData = $this->userModel->getBySessionId($userId);
 
-            if($userData->getName() !== $newName){
-                $this->userModel->updateNameById($newName, $userId);
+            if($user->getName() !== $newName){
+                $this->userModel->updateNameById($newName, $user->getId());
             }
 
-            if($userData->getEmail() !== $newEmail){
-                $this->userModel->updateEmailById($newEmail, $userId);
+            if($user->getEmail() !== $newEmail){
+                $this->userModel->updateEmailById($newEmail, $user->getId());
             }
 
             header("Location: /profile");
@@ -253,5 +218,11 @@ class UserController
             }
         }
         return $errors;
+    }
+
+    public function logout()
+    {
+        $this->authService->logout();
+        header("Location: /login");
     }
 }

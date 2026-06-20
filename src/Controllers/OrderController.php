@@ -9,15 +9,15 @@ use Model\OrderProduct;
 
 
 
-class OrderController
+class OrderController extends BaseController
 {
     private $orderModel;
-
     private $productModel;
     private $userProductsModel;
     private $orderProductModel;
     public function __construct()
     {
+        parent::__construct();
         $this->orderModel = new Order();
         $this->userProductsModel = new UserProducts();
         $this->orderProductModel = new OrderProduct();
@@ -26,11 +26,9 @@ class OrderController
     }
     public function getCheckoutOrderForm()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
 
-        if (!isset($_SESSION['userId'])) {
+
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
@@ -45,11 +43,9 @@ class OrderController
 
     public function handleCheckoutOrder()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
 
-        if (!isset($_SESSION['userId'])) {
+
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
@@ -57,7 +53,7 @@ class OrderController
         $errors = $this->validete($_POST);
 
         if(empty($errors)){
-            $userId = $_SESSION['userId'];
+            $user = $this->authService->getCurrentUser();
 
             $contactName = $_POST['contact_name'];
             $contactNumber = $_POST['contact_number'];
@@ -76,7 +72,7 @@ class OrderController
 
             $address = "ул. {$street},{$apartment} г. {$city}, {$region}";
 
-            $orderId = $this->orderModel->addOrder($contactName,$contactNumber,$comment,$address,$userId);
+            $orderId = $this->orderModel->addOrder($contactName,$contactNumber,$comment,$address,$user->getId());
 
 
             $userProducts = $this->userProductsModel->getUserProducts();
@@ -87,7 +83,7 @@ class OrderController
                 $this->orderProductModel->create($orderId->getId(),$productId,$amount);
             }
 
-            $this->userProductsModel->deleteByUserId($userId);
+            $this->userProductsModel->deleteByUserId($user->getId());
 
 
 
@@ -166,19 +162,16 @@ class OrderController
 //    }
 
     public function getAllOrders() {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
 
-        if (!isset($_SESSION['userId'])) {
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
 
-        $userId  = $_SESSION['userId'];
+        $user = $this->authService->getCurrentUser();
 
         // получаю все заказы пользователя по userId
-        $userOrders = $this->orderModel->getAllByUserId($userId);
+        $userOrders = $this->orderModel->getAllByUserId($user->getId());
 
         $allOrders = []; // массив всех заказов
 

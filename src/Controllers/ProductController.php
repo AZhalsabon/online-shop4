@@ -5,13 +5,14 @@ use Model\Product;
 use Model\UserProducts;
 
 
-class ProductController
+class ProductController extends BaseController
 {
     private $productModel;
     private $cartModel;
 
     public function __construct()
     {
+        parent::__construct();
         $this->productModel = new Product();
         $this->cartModel = new UserProducts();
 
@@ -20,11 +21,7 @@ class ProductController
 
     public function getCatalog()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-
-        if (!isset($_SESSION['userId'])) {
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
@@ -38,11 +35,7 @@ class ProductController
 
     public function getDataCatalog()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-
-        if (!isset($_SESSION['userId'])) {
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
@@ -57,11 +50,7 @@ class ProductController
 
     public function getAddProduct()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-
-        if (!isset($_SESSION['userId'])) {
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
@@ -72,11 +61,7 @@ class ProductController
 
     public function decreaseProduct()
     {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-
-        if (!isset($_SESSION['userId'])) {
+        if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
@@ -110,29 +95,24 @@ class ProductController
         $errors = $this->validateAddProduct($_POST);
 
         if(empty($errors) ){
-
-            if(session_status() !== PHP_SESSION_ACTIVE){
-                session_start();
-            }
-
-            if (!isset($_SESSION['userId'])) {
+            if ($this->authService->check()) {
                 header("Location: /login");
                 exit;
             }
 
 
-            $userId = $_SESSION['userId'];
+            $user = $this->authService->getCurrentUser();
             $productId = $_POST['product_id'];
             $amount = $_POST['amount'];
 
-            $data = $this->productModel->getUserProductByProductIdUserId($productId,$userId);
+            $data = $this->productModel->getUserProductByProductIdUserId($productId,$user->getId());
 
             if($data === null){
-                $this->productModel->addUserProducts($productId, $userId, $amount);
+                $this->productModel->addUserProducts($productId, $user->getId(), $amount);
             }else{
                 $amount = $amount + $data->getAmount();
 
-                $this->productModel->updateAmountProducts($productId, $userId, $amount);
+                $this->productModel->updateAmountProducts($productId, $user->getId(), $amount);
 
 
             }

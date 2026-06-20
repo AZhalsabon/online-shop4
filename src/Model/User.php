@@ -59,8 +59,6 @@ class User extends Model
             $obj->password = $dataUser['password'];
             return $obj;
         }
-
-        return $dataUser;
     }
 
     public function addUserDb(string $name,string $email,$hashedPassword)
@@ -72,7 +70,7 @@ class User extends Model
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId():int
     {
         return $this->id;
     }
@@ -80,7 +78,7 @@ class User extends Model
     /**
      * @return mixed
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -88,7 +86,7 @@ class User extends Model
     /**
      * @return mixed
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -96,7 +94,7 @@ class User extends Model
     /**
      * @return mixed
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
