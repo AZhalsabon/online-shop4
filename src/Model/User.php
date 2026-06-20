@@ -8,9 +8,14 @@ class User extends Model
     private $email;
     private $password;
 
+    protected function getTableName()
+    {
+        return 'users';
+    }
+
     public function getByEmail(string $email):self|null
     {
-        $stmt = $this->PDO->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt = $this->PDO->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
 
         //getuser
         $stmt->execute(['email'=>$email]);
@@ -31,20 +36,20 @@ class User extends Model
 
     public function updateEmailById(string $email, int $userId)
     {
-        $stmt = $this->PDO->prepare("UPDATE users SET email = :email WHERE id = $userId");
+        $stmt = $this->PDO->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = $userId");
         $stmt->execute(['email'=>$email]);
     }
 
     public function updateNameById(string $name, int $userId)
     {
-        $stmt = $this->PDO->prepare("UPDATE users SET name = :name WHERE id = $userId");
+        $stmt = $this->PDO->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = $userId");
         $stmt->execute(['name'=>$name]);
     }
 
     public function getBySessionId(string $sessionId)
     {
 
-        $stmt = $this->PDO->query('SELECT * FROM users WHERE id = ' . $sessionId);
+        $stmt = $this->PDO->query("SELECT * FROM {$this->getTableName()} WHERE id = " . $sessionId);
 
         //getuser
         $dataUser = $stmt->fetch();
@@ -61,9 +66,16 @@ class User extends Model
         }
     }
 
-    public function addUserDb(string $name,string $email,$hashedPassword)
+    public function addUserDb(
+        string $name,
+        string $email,
+        $hashedPassword)
     {
-        $stmt = $this->PDO->prepare("INSERT INTO users (name,email,password) VALUES (:name,:email,:password)");
+        $stmt = $this->PDO->prepare(
+            "INSERT INTO {$this->getTableName()} (name,email,password)
+            VALUES (:name,:email,:password)"
+        );
+
         $stmt->execute(['name' => $name,'email' => $email,'password' => $hashedPassword]);
     }
 

@@ -11,6 +11,11 @@ class Order extends Model
     private string $address;
     private int $userId;
 
+    protected function getTableName()
+    {
+        return 'orders';
+    }
+
 
     public function addOrder(
         string $contactName,
@@ -20,7 +25,7 @@ class Order extends Model
     ): self|null
     {
         $stmt = $this->PDO->prepare(
-            "INSERT INTO orders (contact_name,contact_number,comment,user_id,address) 
+            "INSERT INTO {$this->getTableName()} (contact_name,contact_number,comment,user_id,address) 
                     VALUES (:contact_name,:contact_number,:comment,:user_id,:address) RETURNING id"
         );
         $stmt->execute([
@@ -47,9 +52,12 @@ class Order extends Model
 
     }
 
-    public function getAllByUserId($userId){
-        $stmt = $this->PDO->prepare(
-            "SELECT * FROM orders WHERE user_id = :userId"
+    public function getAllByUserId(
+        $userId
+    ){
+        $stmt = $this->PDO->prepare("
+            SELECT * FROM {$this->getTableName()} 
+            WHERE user_id = :userId"
         );
         $stmt->execute([
             "userId"=>$userId

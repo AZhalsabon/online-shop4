@@ -4,7 +4,7 @@ namespace Controllers;
 
 use Service\AuthService;
 
-class BaseController
+abstract class BaseController
 {
     protected AuthService $authService;
 

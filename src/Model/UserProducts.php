@@ -8,11 +8,19 @@ class UserProducts extends Model
     private $userId;
     private $amount;
 
+    protected function getTableName()
+    {
+        return 'user_products';
+    }
+
     public function getUserProducts(): array
     {
         $userId = $_SESSION['userId'];
 
-        $stmt = $this->PDO->query("SELECT * FROM user_products WHERE user_id = {$userId}");
+        $stmt = $this->PDO->query(
+            "SELECT * FROM {$this->getTableName()} 
+                    WHERE user_id = {$userId}"
+        );
 
         //get\
 
@@ -63,7 +71,10 @@ class UserProducts extends Model
         foreach ($userProducts as $userProduct){
             $productsId = $userProduct->getProductId();
 
-            $stmt = $this->PDO->query("SELECT * FROM products WHERE id ={$productsId}");
+            $stmt = $this->PDO->query(
+                "SELECT * FROM products 
+                        WHERE id ={$productsId}"
+            );
             $product = $stmt->fetch();
 
             $product['amount'] = $userProduct->getAmount();
@@ -78,7 +89,10 @@ class UserProducts extends Model
 
     public function deleteByUserId(int $userId)
     {
-        $stmt = $this-> PDO->prepare("DELETE FROM user_products WHERE user_id = :userId");
+        $stmt = $this-> PDO->prepare(
+            "DELETE FROM {$this->getTableName()}
+                    WHERE user_id = :userId"
+        );
         $stmt->execute(['userId' =>$userId]);
 
     }
