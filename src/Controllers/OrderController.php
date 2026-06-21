@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use DTO\OrderCreateDTO;
 use Model\Order;
 use Model\Product;
 use Model\UserProducts;
@@ -76,7 +77,9 @@ class OrderController extends BaseController
 
             $address = "ул. {$street},{$apartment} г. {$city}, {$region}";
 
-            $this->orderService->handleCheckoutOrder($contactName,$contactNumber,$comment,$address,$userId);
+            $dto = new OrderCreateDTO($contactName,$contactNumber,$comment,$address,$user);
+
+            $this->orderService->create($dto);
 //            $orderId = $this->orderModel->addOrder($contactName,$contactNumber,$comment,$address,$userId);
 //
 //

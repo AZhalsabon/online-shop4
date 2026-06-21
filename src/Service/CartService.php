@@ -2,6 +2,7 @@
 
 namespace Service;
 
+use DTO\CartAddProductDTO;
 use Model\UserProducts;
 
 class CartService
@@ -13,16 +14,16 @@ class CartService
     }
 
 
-    public function addProduct($productId, $userId, $amount)
+    public function addProduct(CartAddProductDTO $productDTO)
     {
-        $data = $this->userProductModel->getUserProductByProductIdUserId($productId, $userId);
+        $data = $this->userProductModel->getUserProductByProductIdUserId($productDTO->getProductId(), $productDTO->getUser()->getId());
 
         if ($data === null) {
-            $this->userProductModel->addUserProducts($productId, $userId, $amount);
+            $this->userProductModel->addUserProducts($productDTO->getProductId(), $productDTO->getUser()->getId(), $productDTO->getAmount());
         } else {
-            $amount = $amount + $data->getAmount();
+            $amount =  $productDTO->getAmount() + $data->getAmount();
 
-            $this->userProductModel->updateAmountProducts($productId, $userId, $amount);
+            $this->userProductModel->updateAmountProducts($productDTO->getProductId(), $productDTO->getUser()->getId(), $amount);
         }
 
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Controllers;
 
+use DTO\CartAddProductDTO;
 use Model\Product;
 use Model\UserProducts;
 use Service\CartService;
@@ -94,7 +95,9 @@ class CartController extends BaseController
             $productId = $_POST['product_id'];
             $amount = $_POST['amount'];
 
-            $this->cartService->addProduct($productId, $userId, $amount);
+            $data = new CartAddProductDTO($productId,$user, $amount);
+
+            $this->cartService->addProduct($data);
 
             header("Location: /cart");
 
