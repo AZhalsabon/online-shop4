@@ -31,10 +31,10 @@ $app->get('/catalog',ProductController::class,'getDataCatalog');
 $app->get('/profile',UserController::class,'getDataProfile');
 $app->get('/edit-profile',UserController::class,'getEditProfile');
 $app->post('/edit-profile',UserController::class,'editProfile');
-$app->get('/add-product',ProductController::class,'getAddProduct');
-$app->post('/add-product',ProductController::class,'addProduct');
+$app->get('/add-product',CartController::class,'getAddProduct');
+$app->post('/add-product',CartController::class,'addProduct');
 
-$app->post('/decrease-product',ProductController::class,'decreaseProduct');
+$app->post('/decrease-product',CartController::class,'decreaseProduct');
 
 $app->get('/cart',CartController::class,'getCart');
 $app->get('/create-order',OrderController::class,'getCheckoutOrderForm');

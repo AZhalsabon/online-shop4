@@ -6,11 +6,12 @@ use Model\Order;
 use Model\Product;
 use Model\UserProducts;
 use Model\OrderProduct;
-
+use Service\OrderService;
 
 
 class OrderController extends BaseController
 {
+    private $orderService;
     private $orderModel;
     private $productModel;
     private $userProductsModel;
@@ -18,6 +19,8 @@ class OrderController extends BaseController
     public function __construct()
     {
         parent::__construct();
+        $this->orderService = new OrderService();
+
         $this->orderModel = new Order();
         $this->userProductsModel = new UserProducts();
         $this->orderProductModel = new OrderProduct();
@@ -54,6 +57,7 @@ class OrderController extends BaseController
 
         if(empty($errors)){
             $user = $this->authService->getCurrentUser();
+            $userId = $user->getId();
 
             $contactName = $_POST['contact_name'];
             $contactNumber = $_POST['contact_number'];
@@ -72,18 +76,19 @@ class OrderController extends BaseController
 
             $address = "ул. {$street},{$apartment} г. {$city}, {$region}";
 
-            $orderId = $this->orderModel->addOrder($contactName,$contactNumber,$comment,$address,$user->getId());
-
-
-            $userProducts = $this->userProductsModel->getUserProducts();
-
-            foreach ($userProducts as $userProduct){
-                $productId = $userProduct->getProductId();
-                $amount = $userProduct->getAmount();
-                $this->orderProductModel->create($orderId->getId(),$productId,$amount);
-            }
-
-            $this->userProductsModel->deleteByUserId($user->getId());
+            $this->orderService->handleCheckoutOrder($contactName,$contactNumber,$comment,$address,$userId);
+//            $orderId = $this->orderModel->addOrder($contactName,$contactNumber,$comment,$address,$userId);
+//
+//
+//            $userProducts = $this->userProductsModel->getUserProducts();
+//
+//            foreach ($userProducts as $userProduct){
+//                $productId = $userProduct->getProductId();
+//                $amount = $userProduct->getAmount();
+//                $this->orderProductModel->create($orderId->getId(),$productId,$amount);
+//            }
+//
+//            $this->userProductsModel->deleteByUserId($userId);
 
 
 

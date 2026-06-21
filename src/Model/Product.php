@@ -4,10 +4,6 @@ namespace Model;
 class Product extends Model
 {
     private $id;
-    private $productId;
-    private $userId;
-    private $amount;
-
     private $name;
     private $description;
     private $imageUrl;
@@ -69,73 +65,31 @@ class Product extends Model
         }
     }
 
-    public function getUserProductByProductIdUserId(
-        $productId,
-        $userId
-    ): self|null
+    public function getdataProducts()
     {
-        $stmt = $this->PDO->prepare(
-            "SELECT * FROM user_products 
-                    WHERE product_id = :productId AND user_id = :userId
-                    ");
-        $stmt->execute(['productId'=>$productId, 'userId'=>$userId]);
+        $products = [];
 
-        //getuserProduct
-        $data = $stmt->fetch();
+        $userProduct = new UserProducts();
 
-        if($data === false){
-            return null;
+        $userProducts = $userProduct->getUserProducts();
 
-        }else{
-            $obj = new self();
-            $obj->id = $data['id'];
-            $obj->productId = $data['product_id'];
-            $obj->userId = $data['user_id'];
-            $obj->amount = $data['amount'];
-            return $obj;
+        foreach ($userProducts as $userProduct){
+            $productsId = $userProduct->getProductId();
+
+            $stmt = $this->PDO->query(
+                "SELECT * FROM {$this->getTableName()} 
+                        WHERE id ={$productsId}"
+            );
+            $product = $stmt->fetch();
+
+            $product['amount'] = $userProduct->getAmount();
+
+            $products[] = $product;
+
         }
 
-    }
-
-    public function addUserProducts(
-        $productId,
-        $userId,
-        $amount
-    )
-    {
-        if ($amount > 0){
-            $stmt = $this->PDO->prepare(
-                "INSERT INTO user_products (user_id, product_id, amount)
-                        VALUES (:userId,:productId,:amount)");
-            $stmt->execute(['userId'=>$userId,'productId'=>$productId,'amount'=>$amount]);
-        }
-    }
-
-    public function updateAmountProducts(
-        $productId,
-        $userId,
-        $amount)
-    {
-        if($amount <= 0){
-            $this->removeUserProduct($productId, $userId);
-        }
-        $stmt = $this->PDO->prepare(
-            "UPDATE user_products SET amount = :amount 
-                     WHERE user_id = :userId and product_id = :productId"
-        );
-
-        $stmt->execute(['amount'=>$amount,'userId'=>$userId,'productId'=>$productId]);
-
-    }
-
-    public function removeUserProduct($productId, $userId)
-    {
-        $stmt = $this->PDO->prepare(
-            "DELETE FROM user_products 
-                    WHERE user_id = :userId AND product_id = :productId"
-        );
-
-        return $stmt->execute(['userId' => $userId, 'productId' => $productId]);
+        //get
+        return $products;
     }
 
     /**
@@ -144,30 +98,6 @@ class Product extends Model
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProductId()
-    {
-        return $this->productId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAmount()
-    {
-        return $this->amount;
     }
 
     /**
