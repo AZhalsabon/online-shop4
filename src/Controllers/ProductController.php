@@ -2,6 +2,9 @@
 namespace Controllers;
 
 use Model\Product;
+use Model\User;
+
+use Model\Review;
 use Model\UserProducts;
 
 
@@ -9,12 +12,64 @@ class ProductController extends BaseController
 {
     private $productModel;
     private $cartModel;
+    private $userModel;
+
+    private $reviewModel;
 
     public function __construct()
     {
         parent::__construct();
         $this->productModel = new Product();
         $this->cartModel = new UserProducts();
+        $this->reviewModel = new Review();
+        $this->userModel = new User();
+
+
+
+
+    }
+
+    public function getOneProduct()
+    {
+        if ($this->authService->check()) {
+            header("Location: /login");
+            exit;
+        }
+
+        $user = $this->authService->getCurrentUser();
+
+
+        $productId = $_GET['product_id'];
+
+        $product = $this->productModel->getProductsById($productId);
+
+        $reviews = $this->reviewModel->getReviews($productId);
+
+
+
+
+        require_once '../Views/product_page.php';
+
+
+    }
+
+    public function addReviewsProduct()
+    {
+        if ($this->authService->check()) {
+            header("Location: /login");
+            exit;
+        }
+
+        $userId = $_POST['user_id'];
+        $grade = (int) $_POST['rating'];
+        $review = (string) $_POST['review'];
+        $productId =(float) $_POST['product_id'];
+
+        $productReview = $this->reviewModel->addReview($productId, $userId, $review,$grade);
+
+
+        echo 'работает';
+
 
 
     }

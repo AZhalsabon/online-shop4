@@ -87,7 +87,9 @@ class UserProducts extends Model
         return $products;
     }
 
-    public function deleteByUserId(int $userId)
+    public function deleteByUserId(
+        int $userId
+    )
     {
         $stmt = $this-> PDO->prepare(
             "DELETE FROM {$this->getTableName()}

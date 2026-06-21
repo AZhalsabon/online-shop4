@@ -43,6 +43,8 @@
                     </div>
                 </div>
             </div>
+
+
 <!--            <div class="card">-->
 <!---->
 <!--                <div class="card-image">-->
@@ -61,6 +63,14 @@
 <!--            </div>-->
             
         <div class="buttons-group">
+
+                    <form action="/product" method="GET">
+                        <input type="hidden" name="product_id" placeholder="Ваше product_id" value="<?php echo $product->getId()  ?>">
+
+                        <button class="quantity-btn plus" type="submit">Подробнее про товар</button>
+
+                    </form>
+
             <form action="/add-product" method="POST">
 
                 <input type="hidden" name="product_id" placeholder="Ваше product_id" value="<?php echo $product->getId()  ?>">

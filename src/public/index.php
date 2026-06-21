@@ -27,6 +27,7 @@ $app->post('/registration',UserController::class,'registrate');
 $app->get('/login',UserController::class,'getLogin');
 $app->post('/login',UserController::class,'login');
 $app->get('/catalog',ProductController::class,'getDataCatalog');
+
 $app->get('/profile',UserController::class,'getDataProfile');
 $app->get('/edit-profile',UserController::class,'getEditProfile');
 $app->post('/edit-profile',UserController::class,'editProfile');
@@ -39,6 +40,9 @@ $app->get('/cart',CartController::class,'getCart');
 $app->get('/create-order',OrderController::class,'getCheckoutOrderForm');
 $app->post('/create-order',OrderController::class,'handleCheckoutOrder');
 $app->addRoutes('/orders','GET',OrderController::class,'getAllOrders');
+
+$app->get('/product',ProductController::class,'getOneProduct');
+$app->post('/product',ProductController::class,'addReviewsProduct');
 
 
 $app->run();
