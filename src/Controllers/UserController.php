@@ -2,7 +2,11 @@
 namespace Controllers;
 
 
+use DTO\AuthDTO;
 use Model\User;
+use Request\EditProfileRequest;
+use Request\LoginRequest;
+use Request\RegistrateRequest;
 
 class UserController extends BaseController
 {
@@ -23,14 +27,14 @@ class UserController extends BaseController
         require_once '../Views/get_registration.php';
     }
 
-    public function registrate()
+    public function registrate(RegistrateRequest $request)
     {
-        $errors = $this->validateRegistrationForm($_POST);
+        $errors = $request->validate();
         if (empty($errors)){
 
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+            $name = $request->getName();
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
 
             $result =  $this->userModel->getByEmail($email);
@@ -50,57 +54,23 @@ class UserController extends BaseController
         require_once '../Views/get_registration.php';
     }
 
-    private function validateRegistrationForm(array $arrpost){
-        $errors = [];
-
-        if(isset($arrpost['name'])){
-            $name = $arrpost['name'];
-
-            if(strlen($name) < 2){
-                $errors['name'] = 'имя должно быть больше 2 символов';
-            }
-        }else{
-            $errors['name'] = 'имя должно быть заполнено';
-        }
-
-        if(isset($arrpost['email'])){
-            $email = $arrpost['email'];
-
-            if(strlen($email) < 2){
-                $errors['email'] = 'имя должно быть больше 2 символов';
-            } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false){
-                $errors['email'] = 'данные неверные';
-            }
-        }else{
-            $errors['email'] = 'email должнен быть заполнен';
-        }
-
-        if(isset($arrpost['password'])){
-            $password = $arrpost['password'];
-
-            if (strlen($password) < 6 ){
-                $errors['password'] = 'праоль должен быть больше 6 символов';
-            } elseif ($confirm = $arrpost['confirm'] and $password !== $confirm){
-                $errors['confirm'] = 'пароли не совподают';
-            }
-        }
-        return $errors;
-    }
     public function getLogin()
     {
         require_once '../Views/get_login.php';
     }
 
-    public function login()
+    public function login(LoginRequest $request)
     {
-        $errors = $this->validateLoginForm($_POST);
+        $errors = $request->validate();
 
         if(empty($errors)){
 
-            $useremail = $_POST['useremail'];
-            $password = $_POST['password'];
+            $useremail = $request->getEmail();
+            $password = $request->getPassword();
 
-            $result = $this->authService->auth($useremail,$password);
+            $data = new AuthDTO($useremail,$password);
+
+            $result = $this->authService->auth($data);
 
             if ($result === true){
                 header("Location: /catalog");
@@ -110,19 +80,6 @@ class UserController extends BaseController
             }
         }
         require_once "../Views/get_login.php";
-    }
-
-    private function validateLoginForm(array $arrpost): array
-    {
-        $errors = [];
-
-        if(empty($arrpost['useremail'])){
-            $errors['useremail'] = 'Поле email должно быть заполнено';
-        }
-        if(empty($arrpost['password'])){
-            $errors['password'] = 'Поле password должно быть заполнено';
-        }
-        return $errors;
     }
 
     public function getProfile()
@@ -157,9 +114,9 @@ class UserController extends BaseController
         require_once '../Views/edit_profile_page.php';
     }
 
-    public function editProfile()
+    public function editProfile(EditProfileRequest $request)
     {
-        $errors = $this->validateEditProfile($_POST);
+        $errors = $request->validate();
 
         if ($this->authService->check()) {
             header("Location: /login");
@@ -167,8 +124,8 @@ class UserController extends BaseController
         }
 
         if(empty($errors)){
-            $newName = $_POST['name'];
-            $newEmail = $_POST['email'];
+            $newName = $request->getName();
+            $newEmail = $request->getEmail();
             $user = $this->authService->getCurrentUser();
 
             require_once '../Model/User.php';
@@ -186,38 +143,6 @@ class UserController extends BaseController
             exit;
         }
         require_once '../Views/editProfile_page.php';
-    }
-
-    private function validateEditProfile(array $data): array
-    {
-        $errors = [];
-
-        if(isset($data['name'])){
-            $name = $data['name'];
-            if(strlen($name) < 3){
-                $errors['name'] = "Имя короткое";
-            }
-        }
-
-        if(isset($data['email'])){
-            $name = $data['email'];
-            if(strlen($name) < 3){
-                $errors['email' ] = "email короткий";
-            }elseif(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)){
-                $errors['email'] = "некорректный email";
-            }
-        }else{
-            $userId = $_SESSION['userId'];
-
-            require_once '../Model/User.php';
-
-            $user =  $this->userModel->getByEmail($data['email']);
-
-            if ($user->getId() !== $userId){
-                $errors = "Этот Email уже занят";
-            }
-        }
-        return $errors;
     }
 
     public function logout()

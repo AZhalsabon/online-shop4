@@ -6,6 +6,8 @@ use Model\User;
 
 use Model\Review;
 use Model\UserProducts;
+use Request\AddReviewProductRequest;
+use Request\GetOneProductIdRequest;
 
 
 class ProductController extends BaseController
@@ -29,7 +31,7 @@ class ProductController extends BaseController
 
     }
 
-    public function getOneProduct()
+    public function getOneProduct(GetOneProductIdRequest $request)
     {
         if ($this->authService->check()) {
             header("Location: /login");
@@ -39,7 +41,7 @@ class ProductController extends BaseController
         $user = $this->authService->getCurrentUser();
 
 
-        $productId = $_GET['product_id'];
+        $productId = $request->getProductId();
 
         $product = $this->productModel->getProductsById($productId);
 
@@ -53,17 +55,17 @@ class ProductController extends BaseController
 
     }
 
-    public function addReviewsProduct()
+    public function addReviewsProduct(AddReviewProductRequest $request)
     {
         if ($this->authService->check()) {
             header("Location: /login");
             exit;
         }
 
-        $userId = $_POST['user_id'];
-        $grade = (int) $_POST['rating'];
-        $review = (string) $_POST['review'];
-        $productId =(float) $_POST['product_id'];
+        $userId = $request->getUserId();
+        $grade = $request->getRating();
+        $review = $request->getReview();
+        $productId = $request->getProductId();
 
         $productReview = $this->reviewModel->addReview($productId, $userId, $review,$grade);
 
@@ -103,106 +105,6 @@ class ProductController extends BaseController
 
     }
 
-//    public function getAddProduct()
-//    {
-//        if ($this->authService->check()) {
-//            header("Location: /login");
-//            exit;
-//        }
-//
-//        require_once '../Views/add_product_form.php';
-//    }
-//
-//
-//    public function decreaseProduct()
-//    {
-//        if ($this->authService->check()) {
-//            header("Location: /login");
-//            exit;
-//        }
-//        $userId = $_SESSION['userId'];
-//        $productId = $_POST['product_id'];
-//        $amount = $_POST['amount'];
-//
-//
-//
-//
-//
-////        $data = $this->productModel->getUserProductByProductIdUserId($productId,$userId);
-////
-////        if($data === null){
-////            $this->productModel->addUserProducts($productId, $userId, $amount);
-////        }else{
-////            $amount = $amount + $data->getAmount();
-////
-////            $this->productModel->updateAmountProducts($productId, $userId, $amount);
-////
-////
-////        }
-//
-//        header("Location: /cart");
-//
-//    }
-//
-//
-//    public function addProduct()
-//    {
-//        $errors = $this->validateAddProduct($_POST);
-//
-//        if(empty($errors) ){
-//            if ($this->authService->check()) {
-//                header("Location: /login");
-//                exit;
-//            }
-//
-//
-//            $user = $this->authService->getCurrentUser();
-//            $productId = $_POST['product_id'];
-//            $amount = $_POST['amount'];
-//
-//            $data = $this->productModel->getUserProductByProductIdUserId($productId,$user->getId());
-//
-//            if($data === null){
-//                $this->productModel->addUserProducts($productId, $user->getId(), $amount);
-//            }else{
-//                $amount = $amount + $data->getAmount();
-//
-//                $this->productModel->updateAmountProducts($productId, $user->getId(), $amount);
-//
-//
-//            }
-//
-//
-//            header("Location: /cart");
-//
-//        }
-//
-//    }
-//
-//
-//    private function validateAddProduct(array $data): array
-//    {
-//        $errors = [];
-//
-//        if (isset($data['product_id'])){
-//            $productId = (int) $data['product_id'];
-//
-//            $products = $this->productModel->getProductsById($productId);
-//
-//            if($products === false){
-//                $errors['product_id'] = 'Продукт не найден';
-//            }
-//
-//        }else{
-//            $errors['product_id'] = "id продукта должен быть указан";
-//        }
-//
-////        if(isset($data['amount'])){
-////            $amount = (int) $data['amount'];
-////        }
-//
-//
-//        return $errors;
-//    }
+
 
 }

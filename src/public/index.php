@@ -23,26 +23,26 @@ spl_autoload_register($autoload);
 $app = new Core\App();
 
 $app->get('/registration',UserController::class,'getRegistrate');
-$app->post('/registration',UserController::class,'registrate');
+$app->post('/registration',UserController::class,'registrate',\Request\RegistrateRequest::class);
 $app->get('/login',UserController::class,'getLogin');
-$app->post('/login',UserController::class,'login');
+$app->post('/login',UserController::class,'login',\Request\LoginRequest::class);
 $app->get('/catalog',ProductController::class,'getDataCatalog');
 
 $app->get('/profile',UserController::class,'getDataProfile');
 $app->get('/edit-profile',UserController::class,'getEditProfile');
-$app->post('/edit-profile',UserController::class,'editProfile');
+$app->post('/edit-profile',UserController::class,'editProfile',\Request\EditProfileRequest::class);
 $app->get('/add-product',CartController::class,'getAddProduct');
-$app->post('/add-product',CartController::class,'addProduct');
+$app->post('/add-product',CartController::class,'addProduct',\Request\AddProductRequest::class);
 
-$app->post('/decrease-product',CartController::class,'decreaseProduct');
+//$app->post('/decrease-product',CartController::class,'decreaseProduct');
 
 $app->get('/cart',CartController::class,'getCart');
 $app->get('/create-order',OrderController::class,'getCheckoutOrderForm');
-$app->post('/create-order',OrderController::class,'handleCheckoutOrder');
-$app->addRoutes('/orders','GET',OrderController::class,'getAllOrders');
+$app->post('/create-order',OrderController::class,'handleCheckoutOrder',\Request\HandleCheckoutOrderRequest::class);
+$app->get('/orders',OrderController::class,'getAllOrders');
 
-$app->get('/product',ProductController::class,'getOneProduct');
-$app->post('/product',ProductController::class,'addReviewsProduct');
+$app->get('/product',ProductController::class,'getOneProduct',\Request\GetOneProductIdRequest::class);
+$app->post('/product',ProductController::class,'addReviewsProduct',\Request\AddReviewProductRequest::class);
 
 
 $app->run();

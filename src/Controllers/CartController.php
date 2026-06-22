@@ -4,6 +4,7 @@ namespace Controllers;
 use DTO\CartAddProductDTO;
 use Model\Product;
 use Model\UserProducts;
+use Request\AddProductRequest;
 use Service\CartService;
 
 class CartController extends BaseController
@@ -79,9 +80,9 @@ class CartController extends BaseController
     }
 
 
-    public function addProduct()
+    public function addProduct(AddProductRequest $request)
     {
-        $errors = $this->validateAddProduct($_POST);
+        $errors = $request->validate();
 
         if(empty($errors) ){
             if ($this->authService->check()) {
@@ -92,8 +93,8 @@ class CartController extends BaseController
 
             $user = $this->authService->getCurrentUser();
             $userId = $user->getId();
-            $productId = $_POST['product_id'];
-            $amount = $_POST['amount'];
+            $productId = $request->getProductId();
+            $amount = $request->getAmount();
 
             $data = new CartAddProductDTO($productId,$user, $amount);
 
@@ -103,31 +104,5 @@ class CartController extends BaseController
 
         }
 
-    }
-
-
-    private function validateAddProduct(array $data): array
-    {
-        $errors = [];
-
-        if (isset($data['product_id'])){
-            $productId = (int) $data['product_id'];
-
-            $products = $this->productModel->getProductsById($productId);
-
-            if($products === false){
-                $errors['product_id'] = 'Продукт не найден';
-            }
-
-        }else{
-            $errors['product_id'] = "id продукта должен быть указан";
-        }
-
-//        if(isset($data['amount'])){
-//            $amount = (int) $data['amount'];
-//        }
-
-
-        return $errors;
     }
 }

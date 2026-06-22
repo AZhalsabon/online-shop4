@@ -7,6 +7,7 @@ use Model\Order;
 use Model\Product;
 use Model\UserProducts;
 use Model\OrderProduct;
+use Request\HandleCheckoutOrderRequest;
 use Service\OrderService;
 
 
@@ -45,7 +46,7 @@ class OrderController extends BaseController
         require_once '../Views/order_page.php';
     }
 
-    public function handleCheckoutOrder()
+    public function handleCheckoutOrder(HandleCheckoutOrderRequest $request)
     {
 
 
@@ -54,47 +55,23 @@ class OrderController extends BaseController
             exit;
         }
 
-        $errors = $this->validete($_POST);
+        $errors = $request->validete();
 
         if(empty($errors)){
             $user = $this->authService->getCurrentUser();
-            $userId = $user->getId();
+            $contactName = $request->getContactName();
+            $contactNumber = $request->getContactNumber();
+            $comment = $request->getComment();
+            $address = $request->getAddress();
 
-            $contactName = $_POST['contact_name'];
-            $contactNumber = $_POST['contact_number'];
 
-            $street = $_POST['street'];
-            $apt = $_POST['apt'];
-            $city = $_POST['city'];
-            $region = $_POST['region'];
-            $comment = $_POST['comment'];
 
-            if (empty(trim($apt))){
-                $apartment = "";
-            }else{
-                $apartment = "кв $apt,";
-            }
-
-            $address = "ул. {$street},{$apartment} г. {$city}, {$region}";
 
             $dto = new OrderCreateDTO($contactName,$contactNumber,$comment,$address,$user);
 
             $this->orderService->create($dto);
-//            $orderId = $this->orderModel->addOrder($contactName,$contactNumber,$comment,$address,$userId);
-//
-//
-//            $userProducts = $this->userProductsModel->getUserProducts();
-//
-//            foreach ($userProducts as $userProduct){
-//                $productId = $userProduct->getProductId();
-//                $amount = $userProduct->getAmount();
-//                $this->orderProductModel->create($orderId->getId(),$productId,$amount);
-//            }
-//
-//            $this->userProductsModel->deleteByUserId($userId);
 
-
-
+            header("Location: /orders");
 
         }else{
             require_once "../Views/order_page.php";
