@@ -76,6 +76,29 @@ class ProductController extends BaseController
 
     }
 
+//    public function getdataProducts()
+//    {
+//        $products = [];
+//
+//        $userProduct = new UserProducts();
+//
+//        $userProducts = $userProduct->getUserProductsByUserId();
+//
+//        foreach ($userProducts as $userProduct){
+//            $productsId = $userProduct->getProductId();
+//
+//            $product = $this->productModel->getProductsById($productsId);
+//
+//            $product['amount'] = $userProduct->getAmount();
+//
+//            $products[] = $product;
+//
+//        }
+//
+//        //get
+//        return $products;
+//    }
+
     public function getCatalog()
     {
         if ($this->authService->check()) {

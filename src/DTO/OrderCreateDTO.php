@@ -6,7 +6,7 @@ use Model\User;
 
 class OrderCreateDTO
 {
-    public function __construct(private $name,private $phon, private $comment,private $address, private User $user){
+    public function __construct(private $name,private $phon, private $comment,private $address){
     }
 
     /**
@@ -41,10 +41,7 @@ class OrderCreateDTO
         return $this->address;
     }
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
+
 
 
 }

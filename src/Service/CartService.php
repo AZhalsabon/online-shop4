@@ -4,26 +4,34 @@ namespace Service;
 
 use DTO\CartAddProductDTO;
 use Model\UserProducts;
+use Service\Auth\AuthInterface;
+use Service\Auth\AuthSessionService;
+
+
 
 class CartService
 {
-    protected $userProductModel;
+    private AuthInterface $authService;
+    private $userProductModel;
 
     public function __construct(){
         $this->userProductModel = new UserProducts();
+        $this->authService = new AuthSessionService();
     }
 
 
     public function addProduct(CartAddProductDTO $productDTO)
     {
-        $data = $this->userProductModel->getUserProductByProductIdUserId($productDTO->getProductId(), $productDTO->getUser()->getId());
+        $user = $this->authService->getCurrentUser();
+
+        $data = $this->userProductModel->getUserProductByProductIdUserId($productDTO->getProductId(),$user->getId());
 
         if ($data === null) {
-            $this->userProductModel->addUserProducts($productDTO->getProductId(), $productDTO->getUser()->getId(), $productDTO->getAmount());
+            $this->userProductModel->addUserProducts($productDTO->getProductId(), $user->getId(), $productDTO->getAmount());
         } else {
             $amount =  $productDTO->getAmount() + $data->getAmount();
 
-            $this->userProductModel->updateAmountProducts($productDTO->getProductId(), $productDTO->getUser()->getId(), $amount);
+            $this->userProductModel->updateAmountProducts($productDTO->getProductId(), $user->getId(), $amount);
         }
 
     }

@@ -13,7 +13,7 @@ class UserProducts extends Model
         return 'user_products';
     }
 
-    public function getUserProducts(): array
+    public function getUserProductsByUserId(): array
     {
         $userId = $_SESSION['userId'];
 

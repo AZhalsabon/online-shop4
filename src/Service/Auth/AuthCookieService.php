@@ -1,11 +1,11 @@
 <?php
 
-namespace Service;
+namespace Service\Auth;
 
 use DTO\AuthDTO;
 use Model\User;
 
-class AuthService
+class AuthCookieService implements AuthInterface
 {
     protected $userModel;
 
@@ -14,16 +14,14 @@ class AuthService
     }
     public function check():bool
     {
-        $this->startSession();
-        return !isset($_SESSION['userId']);
+        return !isset($_COOKIE['userId']);
 
     }
 
     public function getCurrentUser()
     {
-        $this->startSession();
         if(!$this->check()) {
-            $userId =  $_SESSION['userId'];
+            $userId =  $_COOKIE['userId'];
             return $this->userModel->getBySessionId($userId);
 
         }else{
@@ -41,9 +39,7 @@ class AuthService
             $passwordDb = $result->getPassword();
 
             if (password_verify($data->getUserPassword(), $passwordDb)){
-                $this->startSession();
-                $_SESSION['userId'] = $result->getId();
-
+                setcookie('iserId',$result->getId());
                 return true;
 
             }else{
@@ -53,17 +49,10 @@ class AuthService
 
     }
 
-    private function startSession()
-    {
-        if(session_status() !== PHP_SESSION_ACTIVE){
-            session_start();
-        }
-
-    }
-
     public function logout()
     {
-        $this->startSession();
-        session_destroy();
+        setCookie('userId','',time() - 3600,'/');
+        unset($_COOKIE['userId']);
     }
+
 }

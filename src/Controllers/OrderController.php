@@ -38,11 +38,6 @@ class OrderController extends BaseController
             exit;
         }
 
-
-
-//        $dataProducts = $this->cartModel ->getdataProducts();
-
-
         require_once '../Views/order_page.php';
     }
 
@@ -58,16 +53,12 @@ class OrderController extends BaseController
         $errors = $request->validete();
 
         if(empty($errors)){
-            $user = $this->authService->getCurrentUser();
             $contactName = $request->getContactName();
             $contactNumber = $request->getContactNumber();
             $comment = $request->getComment();
             $address = $request->getAddress();
 
-
-
-
-            $dto = new OrderCreateDTO($contactName,$contactNumber,$comment,$address,$user);
+            $dto = new OrderCreateDTO($contactName,$contactNumber,$comment,$address);
 
             $this->orderService->create($dto);
 
@@ -86,65 +77,6 @@ class OrderController extends BaseController
 
         return $errors;
     }
-
-//    public function getAllOrders(){
-//
-//        if(session_status() !== PHP_SESSION_ACTIVE){
-//            session_start();
-//        }
-//
-//        if (!isset($_SESSION['userId'])) {
-//            header("Location: /login");
-//            exit;
-//        }
-//
-//        $userId  = $_SESSION['userId'];
-//
-//        //получаю все заказы пользователя по userId
-//        $userOrders = $this->orderModel->getAllByUserId($userId);
-//
-//        $allOrders = [];
-//
-//
-//        foreach ($userOrders as $userOrder){
-//
-//            $newOrderProduct[] = $userOrder;
-//
-//
-//            $orderId = $userOrder['id'];
-//
-//            $orderProducts = $this->orderProductModel->getAllByOrderId($orderId);
-//
-//            $products = [];
-//
-//            foreach ($orderProducts as $orderProduct){
-//                $productId = $orderProduct['product_id'];
-//
-//                $dataProduct = $this->productModel->getProductsById($productId);
-//
-//                $orderProduct['product_name'] = $dataProduct['name'];
-//                $orderProduct['description'] = $dataProduct['description'];
-//                $orderProduct['price'] = $dataProduct['price'];
-//                $orderProduct['image_url'] = $dataProduct['image_url'];
-//                $orderProduct['total_price'] = $dataProduct["price"]* $orderProduct['amount'];
-//
-//                $products[] = $orderProduct;
-//
-//            }
-//            $userOrder['order_products'] = $newOrderProduct;
-//            $allOrders = $userOrder;
-//
-//
-//        }
-//        print_r($allOrders);
-//
-//        require_once "../Views/user_order_page.php";
-//
-//
-//
-//
-//
-//    }
 
     public function getAllOrders() {
 
@@ -182,14 +114,6 @@ class OrderController extends BaseController
                     'total_price'  => $dataProduct->getPrice() * $orderProduct->getAmount(),
                 ];
 
-//                $orderProduct['product_name'] = $dataProduct->getName();
-//                $orderProduct['description'] = $dataProduct->getDescription();
-//                $orderProduct['price'] = $dataProduct->getPrice();
-//                $orderProduct['image_url'] = $dataProduct->getImageUrl();
-//                $orderProduct['total_price'] = $dataProduct->getPrice() * $orderProduct->getAmount();
-//
-//
-//                $newOrderProduct[] = $orderProduct;
             }
             $totalOrderPrice = 0;
             foreach ($newOrderProduct as $prod) {
@@ -201,17 +125,7 @@ class OrderController extends BaseController
                 'total_price' => $totalOrderPrice,
             ];
 
-//            $userOrder['order_products'] = $newOrderProduct;
-//
-//            $totalOrderPrice = 0;
-//            foreach ($newOrderProduct as $prod) {
-//                $totalOrderPrice += $prod['total_price'];
-//            }
-//            $userOrder['total_price'] = $totalOrderPrice;
-
         }
-
-//        print_r($allOrders);
 
         require_once "../Views/user_order_page.php";
     }

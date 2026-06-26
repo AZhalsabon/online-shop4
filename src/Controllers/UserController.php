@@ -24,6 +24,7 @@ class UserController extends BaseController
             header("Location: /login");
             exit;
         }
+
         require_once '../Views/get_registration.php';
     }
 

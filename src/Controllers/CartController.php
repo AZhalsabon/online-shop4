@@ -49,35 +49,20 @@ class CartController extends BaseController
     }
 
 
-    public function decreaseProduct()
-    {
-        if ($this->authService->check()) {
-            header("Location: /login");
-            exit;
-        }
-        $userId = $_SESSION['userId'];
-        $productId = $_POST['product_id'];
-        $amount = $_POST['amount'];
-
-
-
-
-
-//        $data = $this->productModel->getUserProductByProductIdUserId($productId,$userId);
-//
-//        if($data === null){
-//            $this->productModel->addUserProducts($productId, $userId, $amount);
-//        }else{
-//            $amount = $amount + $data->getAmount();
-//
-//            $this->productModel->updateAmountProducts($productId, $userId, $amount);
-//
-//
+//    public function decreaseProduct()
+//    {
+//        if ($this->authService->check()) {
+//            header("Location: /login");
+//            exit;
 //        }
-
-        header("Location: /cart");
-
-    }
+//        $userId = $_SESSION['userId'];
+//        $productId = $_POST['product_id'];
+//        $amount = $_POST['amount'];
+//
+//
+//        header("Location: /cart");
+//
+//    }
 
 
     public function addProduct(AddProductRequest $request)
@@ -96,7 +81,7 @@ class CartController extends BaseController
             $productId = $request->getProductId();
             $amount = $request->getAmount();
 
-            $data = new CartAddProductDTO($productId,$user, $amount);
+            $data = new CartAddProductDTO($productId, $amount);
 
             $this->cartService->addProduct($data);
 

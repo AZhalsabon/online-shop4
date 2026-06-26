@@ -71,7 +71,7 @@ class Product extends Model
 
         $userProduct = new UserProducts();
 
-        $userProducts = $userProduct->getUserProducts();
+        $userProducts = $userProduct->getUserProductsByUserId();
 
         foreach ($userProducts as $userProduct){
             $productsId = $userProduct->getProductId();
